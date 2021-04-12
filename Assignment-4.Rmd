@@ -1,0 +1,62 @@
+---
+title: "M4Project_Kalavadia"
+author: "Akshay Kirit Kalavadia"
+date: "25/03/2021"
+output: html_document
+---
+```{r,include=FALSE}
+
+library(MASS)
+cats
+male<- subset(cats,subset = (cats$Sex=="M"))
+female<- subset(cats,subset = (cats$Sex=="F"))
+
+mean_Bwt_M<-mean(male$Bwt)
+mean_Bwt_F<- mean(female$Bwt)
+
+sd_Bwt_M <- sd(male$Bwt)
+sd_Bwt_f <- sd(female$Bwt)
+n_M<- nrow(male)
+n_F <- nrow(female)
+
+qt(1-0.05/2,46)
+qt(0.05/2,46)
+
+t_cat_Bwt<- ((mean_Bwt_M-mean_Bwt_F)-0)/sqrt((sd_Bwt_M^2/n_M)+(sd_Bwt_f^2/n_F))
+
+t.test(male$Bwt,female$Bwt,var.equal = FALSE,conf.level = 0.95,alternative = "two.sided",paired = FALSE)
+
+```
+
+```{r}
+qt(0.05/2,46)
+qt(1-0.05/2,46)
+t.test(male$Bwt,female$Bwt,var.equal = FALSE,conf.level = 0.95,alternative = "two.sided",paired = FALSE)
+```
+
+```{r,include=FALSE}
+mean_Hwt_M<-mean(male$Hwt)
+mean_Hwt_F<- mean(female$Hwt)
+
+sd_Hwt_M <- sd(male$Hwt)
+sd_Hwt_f <- sd(female$Hwt)
+t_cat_Hwt<- ((mean_Hwt_M-mean_Hwt_F)-0)/sqrt((sd_Hwt_M^2/n_M)+(sd_Hwt_f^2/n_F))
+
+t.test(male$Hwt,female$Hwt,var.equal = FALSE,conf.level = 0.95,alternative = "two.sided",paired = FALSE)
+```
+
+```{r}
+qt(0.05/2,46)
+qt(1-0.05/2,46)
+t.test(male$Hwt,female$Hwt,var.equal = FALSE,conf.level = 0.95,alternative = "two.sided",paired = FALSE)
+```
+
+
+```{r}
+average_sleep_before <- c(4.6, 7.8, 9.1, 5.6, 6.9, 8.5, 5.3, 7.1, 3.2, 4.4, 4.5, 9.3, 7.7)
+average_sleep_after <- c(6.6, 7.7, 9.0, 6.2, 7.8, 8.3, 5.9, 6.5, 5.8, 4.9, 6.5, 8.9, 7.8)
+
+t.test(average_sleep_before,average_sleep_after,alternative = "two.sided", paired = TRUE,conf.level = 0.95, var.equal = FALSE)
+?t.test()
+```
+

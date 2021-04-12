@@ -1,0 +1,245 @@
+---
+output: html_document
+---
+<P>
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r, include=FALSE}
+library(readxl)
+carset1 <- read_excel("DataSets/car_sales_india_class.xlsx", 
+    sheet = "3Final_Ready", col_types = c("text", 
+        "text", "numeric", "numeric", "text", 
+        "text", "text", "numeric", "numeric", 
+        "numeric", "numeric", "numeric"))
+carset1$Location<- as.factor(carset1$Location)
+carset1$Year<- as.factor(carset1$Year)
+carset1$FuelType<- as.factor(carset1$FuelType)
+carset1$Transmission<- as.factor(carset1$Transmission)
+carset1$Owner<- as.factor(carset1$Owner)
+```
+
+<CENTER>
+<FONT SIZE=4, COLOR = "#A11515">
+<B>PROJECT 1 REPORT </B>
+<BR>
+<B> ALY6010 22939 </B>
+<BR>
+Akshay Kirit Kalavadia
+<BR>
+Prof. Dee Chiluiza, PhD
+<BR>
+03/10/2021
+</FONT></CENTER>
+<P>
+
+<BR><B>
+<FONT SIZE=4, COLOR = "#A11515">
+INTRODUCTION
+</FONT>
+</B>
+<P>
+Coronavirus pandemic has taken a hit at Global economy in 2020. Automobile industry is one of the sector that was affected the most. There was a downward trend in car sales. It fell under 64 million automobiles against predicted sales of 80 million, i.e. 25% below expectations in the year 2020 (Wagner, 2021). Sales in 2020 were 15% below the sales achieved in 2019.
+<P> 
+In the year 2021, there is an improvement in the overall economy due to the availability of vaccination. Everything is slowly going back to normal. There are signs of recovery in the sales of automobile market globally. For 2021, forecast for production of cars in expected to be 84.3 million cars (Culver, 2020).
+<P>
+In  India, vehicle market is expected to see drastic increase in demand after two years of drop in sales of cars in 2019 and 2020. Experts from many analytics firm are predicting that the growth of sale of vehicles will be between 23% to 32% in 2021 (Thakkar,2021). Highest growth in India was 30% in 2010.
+
+<B>Discrete and Continuous Probability Distribution</B> helps us to determine the best course of action by using our judgment in daily life (Tucker, 2020). For example, in the above topic, probability of car sales in 2021 will help companies with planning their production capacity, schedule and the resources required for the same.
+
+<B>Dataset</B>: In this assignment we are using dataset of car sale in India from 1998 to 2019. The dataset includes different car model at different locations in India with different ownership with various prices. It also provides us information about the seating capacity, efficiency, size of the engine(in Cubic Centimeter) and brake horsepower (BHP). Following summary of the dataset will help us understand data properly at first glance.
+<BR>
+```{r}
+summary(carset1)
+```
+
+
+<BR>
+<B>
+<FONT SIZE=4, COLOR = "#A11515">
+Analysis Section
+</FONT>
+</B>
+<P>
+<CENTER><B><FONT COLOR="darkblue">Part-1</FONT></B></CENTER>
+<P>
+<B>Task 3.1</B>: Prepare a bar plot to show the counts of variable efficiency.
+
+```{r}
+barplot(table(carset1$Efficiency),
+        main = "Counts of variable Efficiency",
+        xlab = "Efficiency",
+        ylab = "Car Counts",
+        ylim = c(0,2000),
+        col = rainbow(9))
+```
+<BR>
+<B>Observations</B>: In the above graph, X-axis represents Efficiency and Y-axis represents Car Counts (Frequency). The shape of distribution in the above graph is <FONT COLOR="darkblue">Bell-Shaped</FONT> (Bluman, 2018). It is a <FONT COLOR="darkblue">Normally Distributed</FONT> graph with approximate same <U>mean</U>, <U>median</U> and <U>mode</U> value of <B>18</B> at the center. All the values are mostly distributed evenly on both the sides of the mean. Maximum efficiency variable is located on the right at the right of mean at 30 and minimum  efficiency variable is located at the left of mean at 8.
+<P>
+<BR>
+<B>Task 3.2</B>: Prepare a bar plot to show the counts of variable engine(cc).
+
+```{r}
+barplot(table(carset1$Engine_cc),
+        main = "Counts of variable Engine(cc)",
+        xlab = "Engine(cc)",
+        ylab = "Car Counts",
+        ylim = c(0,2000),
+        col = topo.colors(15))
+```
+<BR>
+<B>Observations</B>: In the above graph, X-axis represents Engine(cc) and Y-axis represents Car Counts (Frequency). The shape of distribution in the above graph is <FONT COLOR="darkblue">Positively</FONT> or <FONT COLOR="darkblue">Right-Skewed shaped</FONT> (Bluman, 2018). The mean of the dataset is 1607, the median is 1400 and the mode is 1200. 1670 cars in the dataset has 1200cc engine and only 5 out of 5844 cars have 5000cc engine. Majority of the data falls on the right of the mean. Mean is located at the left of median and both mean & median falls on the left of mode. The graph has a larger spread, i.e. from 600 to 5000.
+<P>
+<BR>
+<B>Task 3.3</B>: Prepare a bar plot to show the counts of variable power(bph).
+
+```{r}
+barplot(table(carset1$Power_bhp),
+        main = "Counts of variable Power(bhp)",
+        xlab = "Power(bhp)",
+        ylab = "Car Counts",
+        ylim = c(0,3000),
+        col = heat.colors(8))
+```
+<BR>
+<B>Observations</B>: In the above graph, X-axis represents Power(bhp) and Y-axis represents Car Counts (Frequency). The shape of distribution in the above graph is <FONT COLOR="darkblue">Positively</FONT> or <FONT COLOR="darkblue">Right-Skewed shaped</FONT> (Bluman, 2018). The mean of the dataset is 139.3. Both Median and Mode are located on the left of mean at 100 bhp with 2952 observations. Only 5 cars in the dataset has 600 bhp.
+<P>
+<BR>
+<B>Task 3.4</B>: Prepare a bar plot to show the counts of variable seats.
+```{r}
+barplot(table(carset1$Seats),
+        main = "Counts of Seats",
+        xlab = "Seats",
+        ylab = "Car Counts",
+        ylim = c(0,5000),
+        col = 1:6)
+```
+<BR>
+<B>Observations</B>: In the above graph, X-axis represents Seats and Y-axis represents Car Counts (Frequency). The shape of distribution in the above graph is <FONT COLOR="darkblue">Bell-Shaped</FONT> (Bluman, 2018). It is a <FONT COLOR="darkblue">Normally Distributed</FONT> graph with approximate same <U>mean</U>, <U>median</U> and <U>mode</U> value of <B>5</B> at the center. It can be inferred from the graph that most (4891) car users prefer 5 seating cars in India and hence all car manufacturing companies produce 5-seater cars the most. Seats graph has the least spread concentrated at the center. 
+
+<P>
+<CENTER><B><FONT COLOR="darkblue">Part-2</FONT></B></CENTER>
+<P>
+
+<B>Task 3.5</B>: Prepare a table to display individual probabilities of all values inside variable Efficiency. 
+```{r, include=FALSE,echo=FALSE}
+library(sqldf)
+library(RSQLite)
+library(RColorBrewer)
+```
+
+```{r}
+library(DT)
+library(rio)
+library(dbplyr)
+
+carset1_efficiency<-as.data.frame(table(carset1$Efficiency))
+Probablility_efficiency<-as.data.frame(table(carset1$Efficiency)/sum(carset1_efficiency$Freq))
+colnames(Probablility_efficiency)<- c("Efficiency","Probability")
+Probablility_efficiency$Probability<-round(Probablility_efficiency$Probability,4)
+datatable(Probablility_efficiency, options = list(paging = F), rownames = F)
+```
+<P>
+<B>Task 3.6</B>: Prepare a table to display individual probabilities of all values inside variable Engine(cc).
+```{r}
+carset1_engine<-as.data.frame(table(carset1$Engine_cc))
+Probablility_engine<-as.data.frame(table(carset1$Engine_cc)/sum(carset1_engine$Freq))
+colnames(Probablility_engine)<- c("Engine (cc)","Probability")
+Probablility_engine$Probability<-round(Probablility_engine$Probability,4)
+datatable(Probablility_engine, options = list(paging = F), rownames = F)
+```
+<P>
+<B>Task 3.7</B>: Prepare a table to display individual probabilities of all values inside variable Power(bph).
+```{r}
+carset1_Power_bhp<-as.data.frame(table(carset1$Power_bhp))
+Probablility_Power_bhp<-as.data.frame(table(carset1$Power_bhp)/sum(carset1_Power_bhp$Freq))
+colnames(Probablility_Power_bhp)<- c("Power (bhp)","Probability")
+Probablility_Power_bhp$Probability<-round(Probablility_Power_bhp$Probability,4)
+datatable(Probablility_Power_bhp, options = list(paging = F), rownames = F)
+```
+<P>
+<B>Task 3.8</B>: Prepare a table to display individual probabilities of all values inside variable Seats. 
+```{r}
+carset1_Seats<-as.data.frame(table(carset1$Seats))
+Probablility_Seats<-as.data.frame(table(carset1$Seats)/sum(carset1_Seats$Freq))
+colnames(Probablility_Seats)<- c("Seats","Probability")
+Probablility_Seats$Probability<-round(Probablility_Seats$Probability,4)
+datatable(Probablility_Seats,options = list(paging = F), rownames = F)
+```
+
+<P>
+<CENTER><B><FONT COLOR="darkblue">Part-3</FONT></B></CENTER>
+<P>
+<B>Task 3.9</B>: Prepare a histogram and a box plot to display distribution of variable kilometers. 
+
+```{r}
+par(mfrow = c(2,1), mai = c(0.6,1,1,0.4))
+hist(carset1$Km/1000,
+     breaks = 25,
+     main = NA,
+     ylim=c(0,2000),
+     col = brewer.pal((9),"BuGn"),
+     las=1,
+     ylab = "Car Counts"
+     )
+
+boxplot(carset1$Km/1000,
+        horizontal = TRUE,
+        main = NA,
+        col = "#B2EED0")
+
+```
+
+<P>
+<B>Task 3.10</B>: Prepare a histogram and a box plot to display distribution of variable price.
+```{r}
+par(mfrow = c(2,1), mai = c(0.6,1,1,0.4))
+hist(carset1$Price_US_Dollars,
+     breaks = 25,
+     main = NA,
+     ylim=c(0,4000),
+     col = brewer.pal((11),"RdGy"),
+     las=1,
+     ylab = "Car Counts")
+
+boxplot(carset1$Price_US_Dollars,
+        horizontal = TRUE,
+        main = NA,
+        col = rgb(.45, .0, .0))
+```
+<P>
+<BR>
+<BR>
+<B>
+<FONT SIZE=4, COLOR = "#A11515">
+Conclusions
+</FONT>
+</B>
+<P>
+Car sales industry involves a lot of analysis. While looking at the dataset we can infer many observations which will help us work in the direction of effective manufacturing, sales and marketing. In the car sales dataset, we can observe that most customers in India prefer cars with efficiency of 18, engine with 1200cc and 100 braking horse power and 5 seats. It is also inferred from the data that maximum car sold were first hand ownership. Customers in India prefer manual over automatic transmission.
+<P>
+In this Project, I learned how to use RMarkdown to generate reports along with Rscript, better presentation of table with the help of datatable() and how to stack two graphs in a group for better visualization and comparison. I also learned about different shapes of distributions like Normal distribution, Positively-Skewed, Negatively-Skewed and the positions of mean, median and mode in each distribution.
+<P>
+<B>
+<FONT SIZE=4, COLOR = "#A11515">
+Reference
+</FONT>
+</B>
+<P>
+Bluman, A. G. (2018). Elementary statistics: A step by step approach. New York, NY: McGraw-Hill Education.
+<P>
+Culver, M. December 17, 2020. Global Auto Sales Expected to Gain Momentum Next Year; 83.4 Million Light Vehicles to Be Sold In 2021, According to IHS Markit. Business Wire.  Retrieved March 09, 2021, from https://www.businesswire.com/news/home/20201217005798/en/Global-Auto-Sales-Expected-to-Gain-Momentum-Next-Year-83.4-Million-Light-Vehicles-to-Be-Sold-In-2021-According-to-IHS-Markit
+<P>
+Thakkar, K. (2021, January 11). Indian car market may post Record 30% growth in 2021 on low base - Et auto. Retrieved March 09, 2021, from https://auto.economictimes.indiatimes.com/news/passenger-vehicle/cars/indian-car-market-may-post-record-30-growth-in-2021-on-low-base/80218106
+<P>
+Tucker, K. (2020, December 21). Examples of real life probability. Retrieved March 12, 2021, from https://sciencing.com/examples-of-real-life-probability-12746354.html
+<P>
+Wagner, I. (2021, February 05). Topic: Automotive industry worldwide. Retrieved March 09, 2021, from https://www.statista.com/topics/1487/automotive-industry/
+<P>
+<B>
+<FONT SIZE=4, COLOR = "#A11515">
+Appendix
+</FONT>
+</B>
+<P>
+An R Markdown file has been attached to this report. The name of the file is Project1_akshay.Rmd .

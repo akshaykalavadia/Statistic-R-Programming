@@ -1,0 +1,541 @@
+---
+output: html_document
+---
+<P>
+<BR>
+<CENTER>
+<FONT SIZE=4, COLOR = "#A11515">
+<B>PROJECT 1 REPORT </B>
+<BR>
+<B> ALY6010 22939 </B>
+<BR>
+Akshay Kirit Kalavadia
+<BR>
+Prof. Dee Chiluiza, PhD
+<BR>
+03/15/2021
+</FONT></CENTER>
+<P>
+
+<BR><B>
+<FONT SIZE=4, COLOR = "#A11515">
+<U>INTRODUCTION</U>
+</FONT>
+</B>
+<P>
+
+“Clients do not come first. Employees come first. If you take care of your employees,
+they will take care of the clients.” – Richard Branson
+Employees are the greatest assets of the organisation. Salary surveys allow a business to set wages and salaries which will retain top talent which in turn will help them achieve the organisation’s goal. Salary survey is one of the tool which benefits the organisation in following ways :
+<P>
+1.Salary surveys helps a business to determine a range of salary for each position. Based on the survey, a business can determine salary based on education, responsibilities, type of job, experience and knowledge.  
+<P>
+2.Salary surveys help us to maintain better position in the competition. With the help of survey we can find out if we are paying the employees on par with the competitors. If we don’t pay fairly and less than our competitors, employees from our organisation will join other competitors.
+<P>
+3.Salary surveys help us to find out the trends in wages. With time, salaries keep on changing based on changes in job market and demand – supply of workforce. Referring to salary survey will help human resource department to keep up with the fluctuations.
+<P>
+4.Salary surveys help a business with peaceful relations with labour unions. With the help of surveys, companies can maintain minimum wage rates for the employees which will avoid any conflict with the unions and groups.
+<P>
+<BR>
+In statistics, it is not always possible to collect the data of entire population and hence we take the data of samples and infer the results of the samples to the entire population. But sometimes due to error of sampling, the results of the parameters are not exactly the same as the population parameter. Hence we find out a range of values above and below sample mean with a certain degree of confidence within which the parameter value of the population will be located. This interval is known as Confidence interval. (Bluman, 2018).<P>
+Confidence interval is used in many departments of an organisation like marketing, risk management and finance. Confidence interval helps businesses to determine market research reliability. A company would want to know market sales forecast, but they cannot have a fix number with complete certainty . After getting estimates of future sales using surveys and past sales record, company can know the range of sales with the help of confidence interval. In business it’s impossible to predict future risk with 100% accuracy. Companies use confidence interval to manage risk by knowing what will be the likelihood of a risk occurring. For example, a company is 98 % confident that sales will be between 1 million and 4 million units. Business forecasts both revenue and cost during budget preparation by the finance team. By estimating confidence interval of cost and revenue, its help them in financial decision making process and prepares them to deal with incorrect estimates. 
+<P>
+In this project, We will study survey of wages for 20 stores Task-1 and survey of pets owned in Task-2.
+<P>
+<BR>
+<B>
+<FONT SIZE=4, COLOR = "#A11515">
+<U>ANALYSIS</U>
+<BR>
+<BR>
+<CENTER>Section: 1</CENTER>
+</FONT>
+</B>
+<P>
+
+
+<B><FONT  SIZE=4, COLOR="Green">Part-1 : Whole Data</FONT></B>
+<P>
+In this section, we are going to find out 90%, 95%, 99% confidence intervals of whole data of all store. We are taking all the records (<B> n = 247 </B>) and not treating it individually as per stores. We will be using Z-score for calculating Margin of error with the following formula :<BR>
+<B>
+<FONT SIZE=4>
+E = Z * s / √n
+</FONT>
+</B>
+<BR>
+```{r, include=FALSE}
+library(readxl)
+salary_survey <- read_excel("DataSets/M2Data(22939).xlsx", 
+    sheet = "Sheet1")
+## Data is sorted and cleaned. NA values has been removed from the dataset. Following Data will be helpful in Part-2 of task-1.
+Store1<-salary_survey$`Store 1`[!is.na(salary_survey$`Store 1`)]
+Store2<-salary_survey$`Store 2`[!is.na(salary_survey$`Store 2`)]
+Store3<-salary_survey$`Store 3`[!is.na(salary_survey$`Store 3`)]
+Store4<-salary_survey$`Store 4`[!is.na(salary_survey$`Store 4`)]
+Store5<-salary_survey$`Store 5`[!is.na(salary_survey$`Store 5`)]
+Store6<-salary_survey$`Store 6`[!is.na(salary_survey$`Store 6`)]
+Store7<-salary_survey$`Store 7`[!is.na(salary_survey$`Store 7`)]
+Store8<-salary_survey$`Store 8`[!is.na(salary_survey$`Store 8`)]
+Store9<-salary_survey$`Store 9`[!is.na(salary_survey$`Store 9`)]
+Store10<-salary_survey$`Store 10`[!is.na(salary_survey$`Store 10`)]
+Store11<-salary_survey$`Store 11`[!is.na(salary_survey$`Store 11`)]
+Store12<-salary_survey$`Store 12`[!is.na(salary_survey$`Store 12`)]
+Store13<-salary_survey$`Store 13`[!is.na(salary_survey$`Store 13`)]
+Store14<-salary_survey$`Store 14`[!is.na(salary_survey$`Store 14`)]
+Store15<-salary_survey$`Store 15`[!is.na(salary_survey$`Store 15`)]
+Store16<-salary_survey$`Store 16`[!is.na(salary_survey$`Store 16`)]
+Store17<-salary_survey$`Store 17`[!is.na(salary_survey$`Store 17`)]
+Store18<-salary_survey$`Store 18`[!is.na(salary_survey$`Store 18`)]
+Store19<-salary_survey$`Store 19`[!is.na(salary_survey$`Store 19`)]
+Store20<-salary_survey$`Store 20`[!is.na(salary_survey$`Store 20`)]
+
+whole_data<-c(Store1,Store2,Store3,Store4,Store5,Store6,Store7,Store8,Store9,Store10,Store11,Store12,Store13,Store14,Store15,Store16,Store17,Store18,Store19,Store20)
+```
+
+
+```{r}
+mean_whole_data <- mean(whole_data)
+SD_whole_data <- sd(whole_data)
+n_whole_data <- 247
+```
+<FONT SIZE=4, COLOR = "darkblue">
+<B>90% confidence intervals using Z-Score :</B></FONT><BR>
+```{r}
+Z_90 <-round(qnorm((1+0.90)/2),2)
+E_90 <- Z_90 * (SD_whole_data/sqrt(n_whole_data))
+Lower_Limit_90 <- round(mean_whole_data - E_90,2)
+Upper_Limit_90 <- round(mean_whole_data + E_90,2)
+```
+```{r,echo=FALSE}
+print(paste("Sampling Error (E) = ",round(E_90,3)))
+print(paste("Lower Limit = ",Lower_Limit_90))
+print(paste("Upper Limit = ",Upper_Limit_90))
+print(paste("With a 90% confidence level, we can conclude that the mean hourly wage for the population measures between",Lower_Limit_90," and",Upper_Limit_90,"Dollars per hour"))
+```
+```{r,echo= FALSE}
+library("ggplot2")
+y<- as.data.frame(whole_data)
+plot1<-ggplot(y,aes(whole_data))+ geom_density(fill="Grey62")+xlab("Dollars per hour")+
+geom_vline(xintercept=mean(whole_data), size=1, color="red")+ geom_vline(xintercept=Lower_Limit_90, size=1, color="darkgreen")+geom_vline(xintercept=Upper_Limit_90, size=1, color="darkgreen")
+plot1
+```
+<BR>
+<B>Observation</B> : In the above Plot-1, X-axis represents wages in dollars per hour and Y-axis represents density. The red line represents mean of the data while dark green lines represents lower and upper limits for 90% confidence intervals. Lower limit is located on the left of the mean at 12.01 and upper limit is located on the right of the mean at 12.42.The width of the intervals is 0.41. Hence lower and upper limit is the range between which mean of the entire population will be located.
+<P>
+<BR>
+<FONT SIZE=4, COLOR = "darkblue">
+<B>95% confidence intervals using Z-Score :</B></FONT><BR>
+```{r}
+Z_95 <-round(qnorm((1+0.95)/2),2)
+E_95 <- Z_95 * (SD_whole_data/sqrt(n_whole_data))
+Lower_Limit_95 <- round(mean_whole_data - E_95,2)
+Upper_Limit_95 <- round(mean_whole_data + E_95,2)
+```
+```{r,echo=FALSE}
+print(paste("Sampling Error (E) = ",round(E_95,3)))
+print(paste("Lower Limit = ",Lower_Limit_95))
+print(paste("Upper Limit = ",Upper_Limit_95))
+print(paste("With a 95% confidence level, we can conclude that the mean hourly wage for the population measures between",Lower_Limit_95," and",Upper_Limit_95,"Dollars per hour"))
+```
+```{r,echo= FALSE}
+y<- as.data.frame(whole_data)
+plot2<-ggplot(y,aes(whole_data))+ geom_density(fill="Grey62")+xlab("Dollars per hour")+
+geom_vline(xintercept=mean(whole_data), size=1, color="red")+ geom_vline(xintercept=Lower_Limit_95, size=1, color="green3")+geom_vline(xintercept=Upper_Limit_95, size=1, color="green3")
+plot2
+```
+<BR>
+<B>Observation</B> : In the above Plot-2, X-axis represents wages in dollars per hour and Y-axis represents density. The red line represents mean of the data while green lines represents lower and upper limits for 95% confidence interval. Lower limit is located on the left of the mean at 11.97 and upper limit is located on the right of the mean at 12.46. Here we can observe that the width of the interval has increased from 0.41 to 0.49 due to increase in confidence level.
+<P>
+<BR>
+<FONT SIZE=4, COLOR = "darkblue">
+<B>99% confidence intervals using Z-Score :</B></FONT><BR>
+```{r}
+Z_99 <-round(qnorm((1+0.99)/2),2)
+E_99 <- Z_99 * (SD_whole_data/sqrt(n_whole_data))
+Lower_Limit_99 <- round(mean_whole_data - E_99,2)
+Upper_Limit_99 <- round(mean_whole_data + E_99,2)
+```
+```{r,echo=FALSE}
+print(paste("Sampling Error (E) = ",round(E_99,3)))
+print(paste("Lower Limit = ",Lower_Limit_99))
+print(paste("Upper Limit = ",Upper_Limit_99))
+print(paste("With a 99% confidence level, we can conclude that the mean hourly wage for the population measures between",Lower_Limit_99," and",Upper_Limit_99,"Dollars per hour"))
+```
+```{r,echo= FALSE}
+y<- as.data.frame(whole_data)
+plot3<-ggplot(y,aes(whole_data))+ geom_density(fill="Grey62")+xlab("Dollars per hour")+
+geom_vline(xintercept=mean(whole_data), size=1, color="red")+ geom_vline(xintercept=Lower_Limit_99, size=1, color="lawngreen")+geom_vline(xintercept=Upper_Limit_99, size=1, color="lawngreen")
+plot3
+```
+<BR>
+<B>Observation</B> : In the above Plot-3, X-axis represents wages in dollars per hour and Y-axis represents density. The red line represents mean of the data while light green lines represents lower and upper limits for 99% confidence interval. Lower limit is located on the left of the mean at 11.90 and upper limit is located on the right of the mean at 12.53. Here we can observe that the width of the interval has increased from 0.49 to 0.63 due to increase in confidence level.
+<BR>
+<BR>
+<P>
+<B><FONT  SIZE=4, COLOR="Green"> Observation of Part-1</FONT></B>
+<BR>
+<FONT COLOR = "Black">
+<B>(Using all data as one set)</B></FONT>
+```{r,echo=FALSE}
+library(DT)
+library(rio)
+library(dbplyr)
+CI_90<- round(c(Z_90,E_90,Lower_Limit_90,Upper_Limit_90,Upper_Limit_90-Lower_Limit_90),2)
+CI_95<- round(c(Z_95,E_95,Lower_Limit_95,Upper_Limit_95,Upper_Limit_95-Lower_Limit_95),2)
+CI_99<- round(c(Z_99,E_99,Lower_Limit_99,Upper_Limit_99,Upper_Limit_99-Lower_Limit_99),2)
+Conclusion_table_Part_1 <- cbind(CI_90,CI_95,CI_99)
+rownames(Conclusion_table_Part_1)<- c("Z Value","Margin of error","CI-LL","CI-UL","CL Width")
+datatable(Conclusion_table_Part_1,options = list(paging = F))
+```
+<RB>
+In this comparison table, we are comparing the results of different confidence intervals. We can observe that with the increase in confidence intervals, lower limits decreases and upper limit increases. When CI is <B>90%</B>, width is only <B>0.41</B>, but when CI is increase to <B>95%</B>, range of intervals increases and width is increased to <B>0.49</B>. In <B>99%</B> CI, width of the intervals is highest at <B>0.63</B>. We can conclude from these observations that <B>with the increase in confidence level, there is an increase in the width of the intervals</B>.
+<BR>
+<BR>
+<BR>
+<BR>
+<P>
+<B><FONT  SIZE=4, COLOR="Green">Part-2 : Per Store</FONT></B>
+<P>
+In this section we are going to find out 90%, 95%, 99% confidence intervals after taking mean and standard deviation of all 20 stores individually (<B> n = 20 </B>) (<B> df = 19 </B>). We will be using T-score for calculating Margin of error with the following formula :<BR>
+<B>
+<FONT SIZE=4>
+E = t * s / √n
+</FONT>
+</B>
+<BR>
+```{r}
+mean<- round(c(mean(Store1),mean(Store2),mean(Store3),mean(Store4),mean(Store5),mean(Store6),mean(Store7),mean(Store8),mean(Store9),mean(Store10),mean(Store11),mean(Store12),mean(Store13),mean(Store14),mean(Store15),mean(Store16),mean(Store17),mean(Store18),mean(Store19),mean(Store20)),2)
+
+SD<- round(c(sd(Store1),sd(Store2),sd(Store3),sd(Store4),sd(Store5),sd(Store6),sd(Store7),sd(Store8),sd(Store9),sd(Store10),sd(Store11),sd(Store12),sd(Store13),sd(Store14),sd(Store15),sd(Store16),sd(Store17),sd(Store18),sd(Store19),sd(Store20)),2)
+```
+```{r}
+Store_record<-as.data.frame(rbind(mean,SD))
+colnames(Store_record)<- c("Store1","Store2","Store3","Store4","Store5","Store6","Store7","Store8","Store9","Store10","Store11","Store12","Store13","Store14","Store15","Store16","Store17","Store18","Store19","Store20")
+Store_record
+```
+
+After Creating a table of all the mean and standard deviations of all stores, we find out average of mean and sd of all 20 stores.
+```{r}
+n_per_store<-20
+df<-n_per_store-1
+store_mean<- sum(Store_record[1,])/n_per_store
+store_mean
+store_SD <- sum(Store_record[2,])/n_per_store
+store_SD
+```
+<P>
+<BR>
+<FONT SIZE=4, COLOR = "darkblue">
+<B>90% confidence intervals using T-Score :</B></FONT><BR>
+<P>
+```{r}
+T_90 <- round(qt(((1+0.90)/2),19),2)
+Error_90 <- T_90 *(store_SD/sqrt(n_per_store))
+lower_limit_90 <- round(store_mean - Error_90,2)
+upper_limit_90 <- round(store_mean + Error_90,2)
+```
+```{r,echo=FALSE}
+print(paste("Sampling Error (E) = ",round(Error_90,2)))
+print(paste("Lower Limit = ",lower_limit_90))
+print(paste("Upper Limit = ",upper_limit_90))
+print(paste("With a 90% confidence level, we can conclude that the mean hourly wage for the population measures between",lower_limit_90," and",upper_limit_90,"Dollars per hour"))
+```
+```{r,echo=FALSE}
+plot4<-ggplot(y,aes(whole_data))+ geom_density(fill="Grey62")+xlab("Dollars per hour")+
+geom_vline(xintercept=store_mean, size=1, color="red")+ geom_vline(xintercept=lower_limit_90, size=1, color="blue4")+geom_vline(xintercept=upper_limit_90, size=1, color="blue4")
+plot4
+```
+<BR>
+<B>Observation</B> : In the above Plot-4, X-axis represents wages in dollars per hour and Y-axis represents density. The red line represents average of mean of 20 stores, while dark blue lines represents lower and upper limits for 90% confidence intervals for 20 observations. Lower limit is located on the left of the mean at 11.80 and upper limit is located on the right of the mean at 12.81.The width of the intervals is 1.01.
+<P>
+<BR>
+<FONT SIZE=4, COLOR = "darkblue">
+<B>95% confidence intervals using T-Score :</B></FONT><BR>
+<P>
+```{r}
+T_95 <- round(qt(((1+0.95)/2),19),2)
+Error_95 <- T_95 *(store_SD/sqrt(n_per_store))
+lower_limit_95 <- round(store_mean - Error_95,2)
+upper_limit_95 <- round(store_mean + Error_95,2)
+```
+```{r,echo=FALSE}
+print(paste("Sampling Error (E) = ",round(Error_95,3)))
+print(paste("Lower Limit = ",lower_limit_95))
+print(paste("Upper Limit = ",upper_limit_95))
+print(paste("With a 95% confidence level, we can conclude that the mean hourly wage for the population measures between",lower_limit_95," and",upper_limit_95,"Dollars per hour"))
+```
+```{r,echo=FALSE}
+plot5<-ggplot(y,aes(whole_data))+ geom_density(fill="Grey62")+xlab("Dollars per hour")+
+geom_vline(xintercept=store_mean, size=1, color="red")+ geom_vline(xintercept=lower_limit_95, size=1, color="dodgerblue2")+geom_vline(xintercept=upper_limit_95, size=1, color="dodgerblue2")
+plot5
+```
+<BR>
+<B>Observation</B> : In the above Plot-5, X-axis represents wages in dollars per hour and Y-axis represents density. The red line represents average of mean of 20 stores, while light blue lines represents lower and upper limits for 95% confidence interval. Lower limit is located on the left of the mean at 11.69 and upper limit is located on the right of the mean at 12.91. Here we can observe that the width of the interval has increased from 1.01 to 1.22 due to increase in confidence level.
+<P>
+<BR>
+<FONT SIZE=4, COLOR = "darkblue">
+<B>99% confidence intervals using T-Score :</B></FONT><BR>
+<P>
+```{r}
+T_99 <- round(qt(((1+0.99)/2),19),2)
+Error_99 <- T_99 *(store_SD/sqrt(n_per_store))
+lower_limit_99 <- round(store_mean - Error_99,2)
+upper_limit_99 <- round(store_mean + Error_99,2)
+```
+```{r,echo=FALSE}
+print(paste("Sampling Error (E) = ",round(Error_99,3)))
+print(paste("Lower Limit = ",lower_limit_99))
+print(paste("Upper Limit = ",upper_limit_99))
+print(paste("With a 99% confidence level, we can conclude that the mean hourly wage for the population measures between",lower_limit_99," and",upper_limit_99,"Dollars per hour"))
+```
+```{r,echo=FALSE}
+plot6<-ggplot(y,aes(whole_data))+ geom_density(fill="Grey62")+xlab("Dollars per hour")+
+geom_vline(xintercept=store_mean, size=1, color="red")+ geom_vline(xintercept=lower_limit_99, size=1, color="cyan")+geom_vline(xintercept=upper_limit_99, size=1, color="cyan")
+plot6
+```
+<BR>
+<B>Observation</B> : In the above Plot-6, X-axis represents wages in dollars per hour and Y-axis represents density. The red line represents average of  mean of 20 stores, while light green lines represents lower and upper limits for 99% confidence interval. Lower limit is located on the left of the mean at 11.47 and upper limit is located on the right of the mean at 13.14. Here we can observe that the width of the interval has increased from 1.22 to 1.67 due to increase in confidence level.
+<BR>
+<BR>
+<P>
+<B><FONT  SIZE=4, COLOR="Green"> Observation of Part-2</FONT></B>
+<BR>
+<FONT COLOR = "Black">
+<B>(Using average of all means and sd)</B></FONT>
+<BR>
+```{r,echo=FALSE}
+Ci_90<- round(c(T_90,Error_90,lower_limit_90,upper_limit_90,upper_limit_90-lower_limit_90),2)
+Ci_95<- round(c(T_95,Error_95,lower_limit_95,upper_limit_95,upper_limit_95-lower_limit_95),2)
+Ci_99<- round(c(T_99,Error_99,lower_limit_99,upper_limit_99,upper_limit_99-lower_limit_99),2)
+Conclusion_table_Part_2 <- cbind(Ci_90,Ci_95,Ci_99)
+rownames(Conclusion_table_Part_2)<- c("Z Value","Margin of error","CI-LL","CI-UL","CI Width")
+datatable(Conclusion_table_Part_2,options = list(paging = F))
+```
+<P>
+In this comparison table, we are comparing the results of different confidence intervals of average of mean and sd of 20 stores. We can observe that with the increase in confidence intervals, lower limits decreases and upper limit increases. When CI is <B>90%</B>, width is only <B>1.01</B>, but when CI is increase to <B>95%</B>, range of intervals increases and width is increased to <B>1.22</B>. In <B>99%</B> CI, width of the intervals is highest at <B>1.67</B>. We can conclude from these observations that <B>with the increase in confidence level, there is an increase in the width of the intervals</B>.
+<P>
+<BR>
+<BR>
+<CENTER><B><FONT  SIZE=4, COLOR="#A11515">Data Analysis <BR> Section: 1 </FONT></B></CENTER>
+<P>
+```{r,echo=FALSE}
+S1_90<- round(c(Z_90,E_90,Lower_Limit_90,Upper_Limit_90,Upper_Limit_90-Lower_Limit_90),2)
+S2_90<- round(c(T_90,Error_90,lower_limit_90,upper_limit_90,upper_limit_90-lower_limit_90),2)
+S1_95<- round(c(Z_95,E_95,Lower_Limit_95,Upper_Limit_95,Upper_Limit_95-Lower_Limit_95),2)
+S2_95<- round(c(T_95,Error_95,lower_limit_95,upper_limit_95,upper_limit_95-lower_limit_95),2)
+S1_99<- round(c(Z_99,E_99,Lower_Limit_99,Upper_Limit_99,Upper_Limit_99-Lower_Limit_99),2)
+S2_99<- round(c(T_99,Error_99,lower_limit_99,upper_limit_99,upper_limit_99-lower_limit_99),2)
+Final_Conclusion_Table <- cbind(S1_90,S2_90,S1_95,S2_95,S1_99,S2_99) 
+rownames(Final_Conclusion_Table)<-c("Z Value","Margin of error","CI-LL","CI-UL","CI Width")
+datatable(Final_Conclusion_Table,options = list(paging = F))
+```
+In the above table, we can see the comparison of values for Confidence level 90%, 95% and 99% with two different strategies. We can observe in the table that with Strategy-1, we have lower width of the intervals and the margin of error is smaller as compared to Strategy-2. Lowest margin of error and CI width in Strategy-1 are 0.2 and 0.41 respectively, while in Strategy-2 it is 0.51 and 1.01 respectively for 90% CI. Highest margin of error and CI width in Strategy-1 are 0.32 and 0.63 respectively, while in Strategy-2 it is 0.83 and 1.67 respectively for 99% CI.
+
+<B><Font COLOR="White">_____________________________</FONT>Strategy-1<Font COLOR="White">________________________________________________________</FONT>Strategy-2</B>
+```{r,fig.width=10, fig.height=7.,echo=FALSE}
+library(gridExtra)
+grid.arrange(plot1,plot4,plot2,plot5,plot3,plot6,ncol=2,nrow=3)
+```
+<P>In the above plots, we compare the results of different confidence level for both strategies. Plots in column-1 shows plots of Strategy-1 and column-2 of Strategy-2 at 90%, 95% and 99% CI respectively.Even though the data is same in both strategy, the procedure is different and hence n are different for both strategy. We can clearly observe that CI Width between lower and upper limit are less in Strategy-1 than Strategy-2. We can conclude that with increase in number of observations, the width of CI decreases.
+<P>
+<BR>
+<FONT SIZE=4, COLOR = "darkblue">
+<B>Box Plot : All Stores Data</B></FONT><BR>
+```{r,include=FALSE}
+stats1 = round(boxplot.stats(salary_survey$`Store 1`)$stats,1)
+stats2 = round(boxplot.stats(salary_survey$`Store 2`)$stats,1)
+stats3 = round(boxplot.stats(salary_survey$`Store 3`)$stats,1)
+stats4 = round(boxplot.stats(salary_survey$`Store 4`)$stats,1)
+stats5 = round(boxplot.stats(salary_survey$`Store 5`)$stats,1)
+stats6 = round(boxplot.stats(salary_survey$`Store 6`)$stats,1)
+stats7 = round(boxplot.stats(salary_survey$`Store 7`)$stats,1)
+stats8 = round(boxplot.stats(salary_survey$`Store 8`)$stats,1)
+stats9 = round(boxplot.stats(salary_survey$`Store 9`)$stats,1)
+stats10 = round(boxplot.stats(salary_survey$`Store 10`)$stats,1)
+stats11 = round(boxplot.stats(salary_survey$`Store 11`)$stats,1)
+stats12 = round(boxplot.stats(salary_survey$`Store 12`)$stats,1)
+stats13 = round(boxplot.stats(salary_survey$`Store 13`)$stats,1)
+stats14 = round(boxplot.stats(salary_survey$`Store 14`)$stats,1)
+stats15 = round(boxplot.stats(salary_survey$`Store 15`)$stats,1)
+stats16 = round(boxplot.stats(salary_survey$`Store 16`)$stats,1)
+stats17 = round(boxplot.stats(salary_survey$`Store 17`)$stats,1)
+stats18 = round(boxplot.stats(salary_survey$`Store 18`)$stats,1)
+stats19 = round(boxplot.stats(salary_survey$`Store 19`)$stats,1)
+stats20 = round(boxplot.stats(salary_survey$`Store 20`)$stats,1)
+f<-rbind(stats1,stats2,stats3,stats4,stats5,stats6,stats7,stats8,stats9,stats10,stats11,stats12,stats13,stats14,stats15,stats16,stats17,stats18,stats19,stats20)
+
+```
+```{r,fig.width=10, fig.height=7}
+boxlabels<- cbind(stats1,stats2,stats3,stats4,stats5,stats6,stats7,stats8,stats9,stats10,stats11,stats12,stats13,stats14,stats15,stats16,stats17,stats18,stats19,stats20)
+colnames(boxlabels)<- c("Store 1","Store 2",'Store 3',"Store 4","Store 5",'Store 6','Store 7',"Store 8",'Store 9','Store 10',"Store 11","Store 12",'Store 13','Store 14','Store 15',"Store 16","Store 17","Store 18",'Store 19',"Store 20")
+boxplot(boxlabels,las=2, col= terrain.colors(20), boxwex=0.2,main = "Boxplot of wages for all stores", ylab = "Dollors per hour")
+text(y = f,
+     labels = f ,
+     x = c(seq(1.45,20.45,by=1)),cex=0.75 )
+points(x = 1:20,mean,col = "red", pch = 19)
+```
+<B>Observation</B> : In the above boxplot, X-axis represents Stores and Y-axis represents dollars per hour. Each box on the plot represents data of each store. Upper limit on the box represents <B>Q-3</B> and lower limit of the box represents <B>Q-1</B>. Middle line in the box represents <B>meadian</B> of the data and the red dot represents <B>mean</B> of the data. Boxplot help us remove the outliers and help us analyse data of each store individually as well as data of all 20 stores together. In this data, we an observe that Store 19 has the highest median among all the stores and hence they pay more to their employees as compared to other stores.We can also compare the mean wages for all the stores. We can also conclude that Store-1 pays the lowest wages among all the stores. We can also understand the distribution of data for each store looking at the boxplot. For example, Store 20 has normal distribution since mean, median and modearea the same position and it has less spread.
+<P>
+<BR>
+<BR>
+<CENTER><FONT SIZE=4, COLOR = "#A11515">
+<B>Section: 2</B></FONT><BR></CENTER>
+<BR>
+<B><FONT  SIZE=4, COLOR="Green">Pet Survey</FONT></B>
+<P>
+In this survey, we have asked 204 people if they have one or more pets. Their response of Yes and NO has been recorded for analysis. In this part we will find out the probability of yes of the population with the help of probability from the sample and confidence interval. <BR>
+```{r,include=FALSE}
+library(readxl)
+pet_survey <- read_excel("DataSets/M2Data(22939).xlsx", 
+    sheet = "Survey", col_names = FALSE)
+```
+Calculation and sorting of data:
+```{r}
+n_pet_survey<- nrow(pet_survey)*ncol(pet_survey)
+yes=sum(pet_survey$...1=="Yes",pet_survey$...2=="Yes",pet_survey$...3=="Yes",pet_survey$...4=="Yes",pet_survey$...5=="Yes",pet_survey$...6=="Yes",pet_survey$...7=="Yes",pet_survey$...8=="Yes",pet_survey$...9=="Yes",pet_survey$...10=="Yes",pet_survey$...11=="Yes",pet_survey$...12=="Yes")
+no= n_pet_survey - yes
+psuccess = yes/n_pet_survey
+pfail= no/n_pet_survey
+```
+```{r,echo=FALSE}
+print(paste("Sample propotion of Success: ",round(psuccess,2), "or ",round(psuccess,2)*100,"%."))
+```
+
+After calculating Probability of Yes and No, that is, Psuccess & Pfail, we will now construct 90%, 94% and 98% confidence intervals for the population of people that owns a pet.
+<P>
+<BR>
+<FONT SIZE=4, COLOR = "darkblue">
+<B>90% Confidence Interval :</B></FONT><BR>
+```{r}
+zvalue_90 = round(qnorm((1+0.90)/2),3)
+error_90 = zvalue_90 * sqrt((psuccess*pfail/n_pet_survey))
+error_90
+ll_90<- round(psuccess-error_90,2)
+ul_90<- round(psuccess+error_90,2)
+```
+```{r,echo=FALSE}
+print(paste("Lower Limit :", ll_90))
+print(paste("Upper Limit :", ul_90))
+```
+Hence, with <B>90%</B> confidence, we can say that, between <B>47%</B> and <B>59%</B> of population has one or more pets.
+<P>
+<BR>
+<FONT SIZE=4, COLOR = "darkblue">
+<B>94% Confidence Interval :</B></FONT><BR>
+```{r}
+zvalue_94 = round(qnorm((1+0.94)/2),3)
+error_94 = zvalue_94 * sqrt((psuccess*pfail/n_pet_survey))
+error_94
+ll_94<- round(psuccess-error_94,2)
+ul_94<- round(psuccess+error_94,2)
+```
+```{r,echo=FALSE}
+print(paste("Lower Limit :", ll_94))
+print(paste("Upper Limit :", ul_94))
+```
+Hence, with <B>94%</B> confidence, we can say that, between <B>46%</B> and <B>60%</B> of population has one or more pets.
+
+<P>
+<BR>
+<FONT SIZE=4, COLOR = "darkblue">
+<B>98% Confidence Interval :</B></FONT><BR>
+```{r}
+zvalue_98 = round(qnorm((1+0.98)/2),3)
+error_98 = zvalue_98 * sqrt((psuccess*pfail/n_pet_survey))
+error_98
+ll_98<- round(psuccess-error_98,2)
+ul_98<- round(psuccess+error_98,2)
+```
+```{r,echo=FALSE}
+print(paste("Lower Limit :", ll_98))
+print(paste("Upper Limit :", ul_98))
+```
+Hence, with <B>98%</B> confidence, we can say that, between <B>45%</B> and <B>61%</B> of population has one or more pets.
+<P>
+<BR>
+<CENTER><B><FONT  SIZE=4, COLOR="#A11515"> Data Analysis<BR> Section: 2 </FONT></B></CENTER>
+<BR>
+```{r,echo=FALSE}
+Lower_limit<- c(ll_90,ll_94,ll_98)
+Upper_limit<- c(ul_90,ul_94,ul_98)
+CI_Comparision<-rbind(Lower_limit,Upper_limit)
+colnames(CI_Comparision)<- c("90%","94%","98%")
+rownames(CI_Comparision)<- c("Lower Limit","Upper Limit")
+datatable(CI_Comparision,options = list(paging = F))
+```
+
+From the above comparison table, we can observe that with increase in confidence Level, there is decrease in lower limit and increase in upper limit. Lower limit is decreasing by 0.01 or 1% and upper limit is increasing by 0.01 or 1%. The degree of certainty decreases with increase in confidence level. Hence we can say with 90% confidence that if a person is selected at random from the population, there is probability of 47% to 59% that she/he may own one or more pet. 
+<P>
+<BR>
+<B><FONT  SIZE=4, COLOR="darkblue">Pie Chart of Response</FONT></B>
+<P>
+```{r}
+library(plotrix)
+slices<- c(yes/n_pet_survey,no/n_pet_survey)
+label<- c("Yes","No")
+percent<- round(slices*100)
+label<- paste(label,percent)
+labels<- paste(label,"%",sep = "")
+pie3D(slices,labels=labels,explode = 0.01,
+   main="Pie Chart of Responses ")
+```
+<P>
+<B>Obervation</B> : In the above pie chart above we can see the percentages of all the response from the survey. We can see that 53% respondents said yes to having one or more pets and 47% respondents said no for having any pets.
+<BR>
+<BR>
+<BR>
+<B>
+<FONT SIZE=4, COLOR = "#A11515">
+<U>CONCLUSION</U>
+</FONT>
+</B>
+<BR>
+<P>
+Analysing salaries of employees is one of the most important function performed by the Human resources department in an organisation. Salary analysis helps us find the best possible salary for each position which will keep employees motivated. <P>In this project I analysed hourly wage survey of 20 stores. The main objective of the analysis is to find out out confidence interval at 90%, 95% and 99% in two different ways. I observed that with increase in confidence level,from 90% to 99%, the width of intervals <B>increased</B> from <B>0.41</B> to <B>0.63</B> in Strategy-1 and <B>1.01</B> to <B>1.67</B> in Strategy-2. In strategy-1, <B>n</B> is equal to <B>247</B> and in Strategy-2, n is equal to <B>20</B>. Therefore, we use <B>Z-score</B> for <B>Strategy-1</B> and <B>T-score</B> for <B>Strategy-2</B>. It has been observed that with decrease in <B>n</B>, the width of the interval increases. Hence with increase in number of observations, the margin of error decreases and mean of the sample becomes more accurate and closer to the mean of the population. The difference between in values of margin of error in both the strategies is <B>0.31</B> for 90% CI,<B> 0.37</B> for 95% CI and <B>0.51</B> for 99% CI. The margin of error is almost <B>2.5 times</B> more in Strategy-2 than Strategy-1. <P>
+In the boxplot, I can observe hourly wage distribution of all 20 stores on the same graph. We are able to know the shape of distribution of wages for each store with the help of mean and median positions.For example, Store 1 has <B>Negatively-Skewed</B> distribution while Store 10 has <B>Positively-Skewed</B> Distribution.<P>
+
+In the pet survey, we are able to see that probability of a respondent having one or more pets is <B>53%</B>. I tried to find out the range of Probability for the entire population using margin of error (E) and Z-Score. With the help of confidence intervals, I found out that with the increase of <B>4%</B> confidence, that is, from 90% to 94%, there is an <B>overall increase of 2%</B> in the width of probability.<P>
+
+In this project, I learned how to find out Confidence Intervals in R and how number of observations affect the confidence interval. I learned how to construct boxplot for various observations and how to insert text labels in boxplot along with mean for each observation. I also learned how to create pie chart according to the percentage of observations and how confidence interval affect range of probability of the population.
+
+<BR>
+<B>
+<FONT SIZE=4, COLOR = "#A11515">
+<U>REFERENCE</U>
+</FONT>
+</B>
+<P>
+Bluman, A. G. (2018). Elementary statistics: A step by step approach. New York, NY: McGraw-Hill Education.
+<P>
+Boxplot in R. 2021. RCODER. Retrieved March 14, 2021, from https://r-coder.com/boxplot-r/ 
+<P>
+Hayes, A. (2020, October 08). Confidence interval definition. Retrieved March 14, 2021, from https://www.investopedia.com/terms/c/confidenceinterval.asp
+<P>
+Hendricks,B. (2018). Employee Salary & Benefit Surveys: Uses & Importance.
+Retrieved March 13, 2021, from https://study.com/academy/lesson/employee-salary-benefit-surveys-uses-importance.html#:~:text=Salary%20surveys%20help%20determine%20wage,ll%20pay%20for%20certain%20positions.&text=By%20doing%20this%2C%20an%20organization,trends%2C%20or%20fluctuations%20in%20compensation
+<P>
+Kabacoff, R. 2017. Pie charts. Quick R by DataCamp. Retrieved March 14, 2021, from https://www.statmethods.net/graphs/pie.html 
+<P>
+Richards, L. (2016, October 26). How the confidence interval affects business. Retrieved March 13, 2021, from https://smallbusiness.chron.com/confidence-interval-affects-business-22021.html
+<P>
+Toman,R. (2019, September 16). Five reasons you need a salary survey. Retrieved March 13, 2021, from https://www.pearlmeyer.com/knowledge-share/article/five-reasons-you-need-a-salary-survey
+<P>
+Wright, B. What are confidence intervals and why do we need them in usability studies? Retrieved March 13, 2021, from https://www.userzoom.com/ux-library/what-are-confidence-intervals-and-why-do-we-need-them/
+<P>
+Zack. Sept 28, 2020. How to Perform a COUNTIF Function in R. Statology. Retrieved March 14, 2021, from https://www.statology.org/countif-r/
+<P>
+<B>
+<FONT SIZE=4, COLOR = "#A11515">
+<U>Appendix</U>
+</FONT>
+</B>
+<P>
+An R Markdown file has been attached to this report. The name of the file is M2Project_kalavadia.Rmd .
+
+
+
+
+
+
+
+

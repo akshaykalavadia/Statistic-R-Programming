@@ -1,0 +1,355 @@
+---
+output: html_document
+---
+<P>
+<BR>
+<CENTER>
+<FONT SIZE=6, COLOR = "#A11515">
+<B>FINAL PROJECT REPORT </B></FONT>
+<BR><FONT SIZE=4, COLOR = "#A11515">
+<B> ALY6010 22939 </B>
+<BR>
+Akshay Kirit Kalavadia
+<BR>
+Prof. Dee Chiluiza, PhD
+<BR>
+Northeastern University
+<BR>
+`r format(Sys.time(), "%d %B, %Y")`
+</FONT></CENTER>
+<P>
+<BR>
+
+<FONT SIZE = 5, COLOR="#3434B3">
+INTRODUCTION
+</FONT>  
+<BR>
+<B>Simple linear analysis</B>: 
+Linear regression is a statistical technique which helps us understand and summarize relationship between two or more quantitative variables. One of the variables is independent variable also referred as explanatory variable and the other is dependent variable which is also referred as outcome variable. In Linear regression, we find out the line that is best fit for all the points on the graph. The equation of the line is: Y = a + bX.  Linear regression analysis is used to find out how much is impact/effect of independent variable on the changes of dependent variable. When we have only one explanatory (independent) variable, the analysis is known as Simple Linear regression analysis.
+
+<B>Multiple linear analysis</B>: When we have more than one explanatory variables in our study, this model is known as Multiple regression analysis (McDonald, 2009).In multiple regression analysis, we try to find out the impact and degree of impact of multiple independent factors on dependent variable. The equation of multiple linear regression line is: ŷ = a + b1x1 + b2x2... + bkxk. 
+
+<B>History</B>:
+Regression was first published by Adrien-Marie Legendre Francis in the form of method of least square in 1805 (Bluman, 2018). Francis Galton drew the line of best fit visually. While working on the inherent characteristics of sweet peas, Galton conceptualized linear regression (Stanton, 2017). An assistant of Karl Pearson’s named G. Yule devised the mathematical solution using the least-squares method, employing a mathematical technique developed by Adrien- Marie Legendre about 100 years earlier (Bluman, 2018).  Subsequently after additional efforts by Galton and Pearson, they came up with the more general techniques of multiple regression and the product-moment correlation coefficient (Stanton, 2001). This came to Galton's notice when he realized that a man's character may be more similar to grandparent than his parents. Hence, he concluded that a variable may be affected by multiple factors simultaneously.
+
+<B>Importance and practical application</B>:
+Linear Regression analysis helps in better decision making. It helps us to understand how the value of dependent variable changes when changes are made in independent variable while keeping other variables fixed. It helps professionals and business analyst to remove unwanted variables while focusing on the important variables.  Linear regression helps business in decision making, optimization of business, predictive analysis, risk analysis and understanding the failures. 	
+
+<B>Simple linear regression and Multiple linear regression in Finance</B>:
+Linear regression is used in finance to predict future trends and economic conditions. 
+Simple linear regression provides line of best fit among all points that are under the study. This helps in financial analysis and forecasting. Simple linear regression is used in Capital asset pricing model (CAPM) which helps in establishing relationship between the risk of investing in a security and the expected returns (Hayes, 2021). Simple linear regression is also used to know how movement of market affects the price of a company. Here we compare effects of one independent variable (overall market movement) on dependent variable. 
+Multiple linear regression is used by finance industry in security analysis. When an analyst wants to understand the moment of price of Chevron Corp, there are many independent variables such as prices movement of future oil contracts, stock prices of competitors, price of oil and interest rates. Therefore, to analyze relationship in which there are more than 2 variables, multiple linear regression is used.
+<BR>
+<BR>
+<FONT SIZE = 5, COLOR="#3434B3">
+ANALYSIS
+</FONT> 
+
+
+<FONT SIZE = 4, COLOR="#A11515"><B>
+Task 1
+</FONT></B>  
+<BR>
+```{r task11,include=FALSE}
+library(DT)
+library(rio)
+library(dbplyr)
+?faithful
+```
+<FONT SIZE=3, COLOR="darkslategray"><B>1.1 Read the data information about faithful, and using your own words, describe the data set.</B> </FONT>
+<BR><P>
+The dataset faithful contains Old faithful geyser data. It shows the waiting time between two eruptions and the duration of the eruption for the Old Faithful geyser in Yellowstone National Park, Wyoming, USA. It is a data frame with 272 observations on 2 variables:<BR>
+1. Eruption time in mins<BR>
+2. Waiting time to next eruption (in mins) <BR>
+<BR>
+<FONT SIZE=3, COLOR="darkslategray"><B>1.2 As you can see, eruptions variable is the first column, since this is the dependent variable, re-organize the columns with waiting first and eruptions second. Use the code subset(), for example: faithful= subset(). Then present the first 3 and the last 3 records of the newly ordered data set using the data.frame(rbind()) code.</B> </FONT>
+<BR><P>
+
+
+```{r task12}
+faithful = subset(faithful, select = c(2,1))
+head = data.frame(rbind(head(faithful,3),tail(faithful,3)))
+datatable(head, rownames = FALSE, options = list(paging = F))
+```
+<BR>
+<FONT SIZE=3, COLOR="darkslategray"><B>1.3 Create a new an R chunk named {r task13}. Prepare objects to answer the following questions. Answer the questions by using inline r codes `r` or ``r``.</B> </FONT>
+<BR><P>
+<FONT SIZE=3, COLOR="#A11515"><B>
+Means
+</B></FONT>
+```{r task13}
+waiting_mean <- mean(faithful$waiting)
+eruption_mean <- mean(faithful$eruptions)
+n_faithful <- nrow(faithful)
+df_faithful <- n_faithful-2
+a_faithful <- 0.01
+
+waiting_quartile<-summary(faithful$waiting)[c(2,3,5)]
+eruption_quartile<-summary(faithful$eruptions)[c(2,3,5)]
+quatile_waiting<- data.frame(cbind(waiting_quartile))
+quartile_waiting_table<- knitr::kable(round(quatile_waiting,2),"pipe",col.names = "Waiting time", align = c("l","c","c"))
+quatile_eruption<- data.frame(cbind(eruption_quartile))
+quartile_eruption_table<- knitr::kable(round(quatile_waiting,2),"pipe",col.names = "Eruption time", align = c("l","c","c"))
+
+cor_faithful<- cor(faithful$waiting,faithful$eruptions)
+determ_faithful<- cor_faithful^2
+
+t_value_faithful<- cor_faithful * sqrt(df_faithful/(1-determ_faithful)) 
+cv_left_faithful<- qt(a_faithful/2,df_faithful)
+cv_right_faithful<-qt(1-a_faithful/2,df_faithful)
+Reject_Ho<-t_value_faithful>cv_right_faithful
+```
+The mean waiting time is: ``r waiting_mean`` <BR>
+The mean eruption time is: ``r eruption_mean``<BR><BR>
+<P>
+<FONT SIZE=3, COLOR="#A11515"><B>
+Quartile Details
+</B></FONT><BR>
+`r quartile_waiting_table`
+`r quartile_eruption_table`
+<FONT SIZE=3, COLOR="#A11515"><B>
+Coefficient of Correlation
+</B></FONT><BR>
+The coefficient of correlation between the two variables is: ``r round(cor_faithful,2)`` <P><P>
+<B>Observation</B>: Coefficient of correlation shows the degree of relationship between two variables. Since the value of r =<B> ``r round(cor_faithful,2)``</B> is close to 1, there is a <I>strong positive relationship</I> between waiting time and eruption time, that is, as the waiting time to next eruption increases, there is an increase in eruption time.<P>
+<BR>
+<FONT SIZE=3, COLOR="#A11515"><B>
+Coefficient of Determination
+</B></FONT><BR>
+The coefficient of determination between the two variables is: ``r round(determ_faithful,2)``<P>
+<B>Observation</B>: Coefficient of determination shows percentage variation in Eruption time can be explained by Waiting time. In this case, <B>``r round(determ_faithful,2)*100``</B>% of Eruption time depends on Waiting time.<P>
+<BR>
+<FONT SIZE=3, COLOR="#A11515"><B>
+Hypothesis
+</B></FONT><BR>
+$$Null Hypothesis: H_0: \rho = 0$$
+$$Alternative Hypothesis: H_1: \rho ≠ 0$$
+The t-test value for the relationship between these variables is: ``r round(t_value_faithful,2)``
+<BR>
+<P>
+<B>Using α = 0.01</B>
+<BR>The Critical values are: ``r round(cv_left_faithful,2)`` and ``r round(cv_right_faithful,2)``<BR>
+<P>
+Since my t-test is positive, I compare it to the critical value on the right: cv_right_faithful.<P>
+<B>Q</B>: Is my t-test greater than the critical value?<BR>
+Since t = ``r round(t_value_faithful,2)`` is higher than critical value = ``r round(cv_right_faithful,2)``, then :<P><B> Reject H0 = ``r Reject_Ho``</B>
+<P>
+There is enough evidence to support the claim that there is a significant relationship between the waiting time and eruption time.
+<BR> <BR>
+
+<FONT SIZE=3, COLOR="darkslategray"><B>1.4 Create a new an R chunk named {r task14}. Prepare a scatter plot for waiting and eruptions. Make sure to include the regression line. Add colors, good labels, change the shape of the data points using pch code. Regression line should have a color too.</B> </FONT>
+
+```{r task14, fig.align='center'}
+linear_faithful <- lm(faithful$eruptions ~ faithful$waiting)
+plot(faithful$waiting,faithful$eruptions,pch=18,col="#00AFBB",
+     xlab = "Waiting Time in mins",
+     ylab = "Eruption Time in mins",
+     main="Linear Regression model between Waiting time and Eruption time")
+     
+abline(linear_faithful, lwd=3, col="Orange")
+```
+<P>The above graph shows a positively correlated scatterplot with a regression line. The X-axis represents Waiting time in mins and Y-axis shows Eruption time in mins. The X-axis values start from 1.5 and goes upto 5.0 at increments of 0.5. The Y-axis value starts at 50 and goes upto 90 at increments of 10. The orange line represents the regression line.
+
+<BR>
+
+<FONT SIZE=3, COLOR="darkslategray"><B>1.5 Create a new an R chunk named {r task15}. Use this code to present a summary of the linear regression model you obtained on task 1.4. Explain the information you obtained.
+</B> </FONT><P>
+```{r task15}
+summary(linear_faithful)
+```
+Summary of the linear regression model displays detailed results of the fitted model.
+We obtain the information about the model parameters for the fitted model, that is, slope and intercept.<P> The slope is ``r coefficients(linear_faithful)[2]`` and the intercept is ``r coefficients(linear_faithful)[1]``. It also shows the df value = ``r linear_faithful$df.residual`` and R-Square value = ``r round(summary(linear_faithful)$r.squared,4)``.
+<BR><P>
+<FONT SIZE=3, COLOR="darkslategray"><B>1.6 Create a new an R chunk named {r task16}. Use code knitr::kable(data.frame()) to prepare an object for the attributes of the linear regression model. Present this table on your report.</B> </FONT><P>
+
+```{r task16}
+knitr::kable(data.frame(attributes(linear_faithful)))
+```
+<BR><P>
+<FONT SIZE=3, COLOR="darkslategray"><B>1.7. Create a new an R chunk named {r task17}. Using the Fitted values you observe in the attributes of the linear regression model, add a new column to the data set, name this column “Expected y”. If your data was well organized, this new column should represent the expected eruption time. Also, add a new column with the residue values (observed y minus expected y). For the new table you have created, present on your report ONLY the first 3 and the last 3 records using only 2 decimals for each value. Use the knitr::kable() code.</B> </FONT><P>
+```{r task17}
+faithful$Expected_y <- linear_faithful$fitted.values
+faithful$residue <- faithful$eruptions - faithful$Expected_y
+
+knitr::kable(round(data.frame(rbind(head(faithful,3),tail(faithful,3))),2),"pipe",col.names = c("Waiting", "Eruption","Expected Y","Residue"), align = c("l","c","c"))
+
+```
+
+
+<BR><P>
+<FONT SIZE=3, COLOR="darkslategray"><B>1.8 Present the linear regression formula.</B> </FONT><P>
+General Formula:<BR>
+$$\hat y = a + bx$$
+Here:<BR>
+$$\hat y = -1.874 + 0.0756x$$
+<P>
+<FONT SIZE=3, COLOR="darkslategray"><B>1.9 Using the linear regression formula, fill the following lines using inline r codes: The expected eruption time for 20 minutes waiting is: ``r ``
+The expected eruption time for 100 minutes waiting is: ``r ``</B> </FONT><P>
+The expected eruption time for 20 minutes waiting is: ``r round(coefficients(linear_faithful)[1] + (coefficients(linear_faithful)[2]* (20)),2)``<BR>
+The expected eruption time for 100 minutes waiting is: ``r round(coefficients(linear_faithful)[1] + (coefficients(linear_faithful)[2]* (100)),2)``<P>
+<FONT SIZE=3, COLOR="#A11515"><B>
+Observation
+</B></FONT><P>
+In this task, we have observed that there is a strong positive relationship (r=``r round(cor_faithful,2)``) between waiting time and eruption, that is, as the<I> waiting time increases</I>, <I>eruption time also increases</I>. We can see positive correlation by looking at the graph of linear regression between waiting time and eruption. The slope of regression line is in the <B>upward direction</B> indicating positive correlation and almost at <B>45°</B> indicating strong relationship. Hence we can confirm that by comparing the expected values of eruption time when waiting time is 20 mins and 100 mins. As the waiting time increases from 20 to 100 mins, the eruption time also increases from ``r round(coefficients(linear_faithful)[1] + (coefficients(linear_faithful)[2]* (20)),2)`` to ``r round(coefficients(linear_faithful)[1] + (coefficients(linear_faithful)[2]* (100)),2)`` mins.
+<BR><BR>
+
+
+<FONT SIZE = 4, COLOR="#A11515"><B>
+Task 2
+</FONT></B>  
+<BR>
+<FONT SIZE=3, COLOR="darkslategray"><B>2.1 Run a multi regression analysis for the following data set. As you have already learnt, enter all your codes in one single r chunk {r task2}, create object names for all your codes and equations, and use the name of the objects you create to present your answers.
+</B> </FONT>
+<P>
+```{r task2}
+patient_id <- c("PK01","PK02","PK03","PK04","PK05","PK06","PK07","PK08","PK09","PK10","PK11")
+age<- c(52,59,67,73,64,74,54,61,65,46,72)
+weight<- c(173,184,194,211,196,220,188,188,207,167,217)
+systolicBP<- c(132,143,153,162,154,168,137,149,159,128,166)
+multi_reg_data <- data.frame(patient_id,age,weight,systolicBP)
+colnames(multi_reg_data)<- c("Patient ID","Age","Weight","SystolicBP")
+
+multiple_regression <- lm(multi_reg_data$SystolicBP ~ multi_reg_data$Age + multi_reg_data$Weight)
+
+corr_age_sysbp <- cor(age,systolicBP)
+determ_age_sysbp <- corr_age_sysbp^2
+
+corr_weight_sysbp <- cor(weight,systolicBP)
+determ_weight_sysbp <- corr_weight_sysbp^2
+cor_deter_table<- as.data.frame(cbind(rbind(corr_age_sysbp,determ_age_sysbp),rbind(corr_weight_sysbp,determ_weight_sysbp)))
+colnames(cor_deter_table)<- c("Age & SystolicBP","Weight & SystolicBP")
+rownames(cor_deter_table)<- c("Correlation Coefficient","Determination Coefficient")
+
+R2<-summary(multiple_regression)$r.squared
+r<-sqrt(R2)
+
+n<- nrow(multi_reg_data)
+k <- 2
+dfN = n-k
+dfD = n-k-1
+f<- (R2/k)/((1-R2)/(n-k-1)) 
+cv<- qf(0.01,dfN,dfD,lower.tail = FALSE)
+RejectHo<- f > cv
+```
+<P>
+<FONT SIZE=3, COLOR="#A11515"><B>
+Equation of Multiple Regression Line
+</B></FONT><BR>
+$$\hat y = a + b_1x_1 + b_2x_2 ...+b_kx_k$$
+<FONT SIZE=3, COLOR = "darkslategray"><B>
+A. The formula of my linear regression model is :</FONT></B><BR>
+<CENTER>ŷ = ``r round(multiple_regression$coefficients[1],2)`` + ``r round(multiple_regression$coefficients[2],2)`` * x1 + ``r round(multiple_regression$coefficients[3],2)``* x2<P></CENTER>
+
+<FONT SIZE=3, COLOR = "darkslategray"><B>
+B.The correlation and determination coefficients between age and systolic blood pressure and weight with systolic blood pressure.</FONT></B>
+``r datatable(round(cor_deter_table,2), options = list(paging = F))``
+<B>Observation</B>:<P>
+<B>Age & SystolicBP</B>: The correlation = ``r round(corr_age_sysbp,2)`` is close to 1. Therefore, there is a <I>strong positive correlation</I> between Age and SystolicBP. The coefficient of determination = ``r round(determ_age_sysbp,2)`` means that ``r round(determ_age_sysbp *100,2)``% of the variation in the SystolicBP is accounted for by the variation in the Age.<P>
+
+<B>Weight & SystolicBP</B>: The correlation = ``r round(corr_weight_sysbp,2)`` is close to 1. therefore, there is a <I>strong positive correlation</I> between Weight and SystolicBP. The coefficient of determination = ``r round(determ_weight_sysbp,2)`` means that ``r round(determ_weight_sysbp *100,2)``% of the variation in the SystolicBP is accounted for by the variation in the Weight.<P>
+<FONT SIZE=3, COLOR = "darkslategray"><B>
+C. The value of your multiple R square and the value of your multiple R. </FONT></B><P>
+The value of multiple R square = ``r round(R2,2)`` and the value of multiple R = ``r round(sqrt(R2),2)``.<P>
+<FONT SIZE=3, COLOR = "darkslategray"><B>
+D. The value of your F test and the hypothesis test result using α = 0.01
+</FONT></B>
+<P>
+<FONT SIZE=3, COLOR="#A11515"><B>
+Hypothesis
+</B></FONT><BR>
+$$Null Hypothesis: H_0: \rho = 0$$
+$$Alternative Hypothesis: H_1: \rho ≠ 0$$
+<B>Using α = 0.01</B><BR>
+The F-test value is: ``r round(f,2)``
+<BR>The Critical values is: ``r round(cv,2)`` <BR>
+<P>
+<B>Q</B>: Is my f-test greater than the critical value?<BR>
+Since t = ``r round(f,2)`` is higher than critical value = ``r round(cv,2)``, then :<P><B> Reject H0 = ``r RejectHo``</B>
+<P>
+There is enough evidence to support the claim that there is a significant relationship between a person's age , weight and SystolicBP.
+<BR> <BR><FONT SIZE=3, COLOR = "darkslategray"><B>
+E. Based on your data analysis results? Can the systolic blood pressure be predicted using the other two variables?</FONT></B>
+<BR><P>
+Based on the data analysis, there is enough evidence that there is a significant relationship between a person's age , weight and SystolicBP. Hence, we can predict the systolic blood pressure using the age and weight of a person using the multiple linear equation model:<BR> ŷ = ``r round(multiple_regression$coefficients[1],2)`` + ``r round(multiple_regression$coefficients[2],2)`` * x1 + ``r round(multiple_regression$coefficients[3],2)``* x2<P>
+<FONT SIZE=3, COLOR = "darkslategray"><B>F. What would be the expected systolic blood pressure for a person age = 45, weight = 135?</FONT></B><P>
+Using the formula of my multiple linear regression model, the expected systolic blood pressure = ``r  round(multiple_regression$coefficients[1] + (multiple_regression$coefficients[2]*45) + (multiple_regression$coefficients[3]* 135),2)``<P>
+<FONT SIZE=3, COLOR = "darkslategray"><B>
+G. What would be the expected systolic blood pressure for a person age = 60, weight = 182?</FONT></B><P>
+Using the formula of my multiple linear regression model, the expected systolic blood pressure = ``r  round(multiple_regression$coefficients[1] + (multiple_regression$coefficients[2]*60) + (multiple_regression$coefficients[3]* 182),2)``<P>
+
+<B>Observation</B>: As we have observed earlier, the systolic blood pressure of a person has a strong positive correlation with age and weight. Hence if the age increases, systolic blood pressure increase. Same goes for weight. As the weight increases, systolic blood pressure also increases. As we can see that since the age is increasing from 45 to 60 and weight is increasing from 135 to 182, the systolic blood pressure is also increasing from ``r  round(multiple_regression$coefficients[1] + (multiple_regression$coefficients[2]*45) + (multiple_regression$coefficients[3]* 135),2)`` to ``r  round(multiple_regression$coefficients[1] + (multiple_regression$coefficients[2]*60) + (multiple_regression$coefficients[3]* 182),2)``.<P>
+
+<FONT SIZE=3, COLOR="darkslategray"><B>2.2 Prepare an additional R chunk to present the scatter plots for age versus systolic blood pressure and weight versus systolic blood pressure. Include their corresponding regression lines. Use the par(mfrow=c()) code to organize your two plots presentation.</B> </FONT><P>
+```{r task2.2, fig.width=12, fig.height=5}
+
+par(mfrow = c(1,2))
+plot(multi_reg_data$Age,multi_reg_data$SystolicBP,pch=19,col="midnightblue",
+     xlab = "Age",
+     ylab = "Systolic Blood Pressure",
+     main="Age vs SystolicBP")
+abline(lm(multi_reg_data$SystolicBP ~ multi_reg_data$Age), lwd=2, col="Orange")
+
+plot(multi_reg_data$Weight,multi_reg_data$SystolicBP,pch=19,col="darkgreen",
+     xlab = "Weight",
+     ylab = "Systolic Blood Pressure",
+     main="Weight vs SystolicBP")
+abline(lm(multi_reg_data$SystolicBP ~ multi_reg_data$Weight), lwd=2, col="Orange")
+```
+The above graphs shows a positively correlated scatterplot with a regression line.<P><BR>
+<I> Age vs SystolicBP</I> : Plot-1 represents Linear regression model between Age and Systolic blood pressure. The X-axis represents Age and Y-axis represents Systolic Blood Pressure. The X-axis values start from 45 and goes upto 75 at increments of 5. The Y-axis value starts at 130 and goes upto 160 at increments of 10. The orange line represents the regression line.<P>
+<I> Weight vs SystolicBP</I> : Plot-2 represents Linear regression model between Weight and Systolic blood pressure. The X-axis represents Weight and Y-axis represents Systolic Blood Pressure. The X-axis values start from 170 and goes upto 220 at increments of 5. The Y-axis value starts at 130 and goes upto 160 at increments of 10. The orange line represents the regression line.<P>
+<FONT SIZE=3, COLOR="#A11515"><B>
+Observation
+</B></FONT><P>
+In this task, I observed that age and weight both are <B>positively correlated</B> with systolic blood pressure. When we plot the regression model of Age vs SystolicBP and Weight vs SystolicBP, We can see that in both the graphs, the linear regression line is sloping in <B>upwards direction</B> indicating <B>positive correlation</B> and is almost at <B>45°</B> indication <B>strong</B> relationship. The values of residue are very low which indicates that most of the points are very close to the regression line.
+<P>
+<FONT SIZE = 5, COLOR="#3434B3">
+CONCLUSION
+</FONT>  
+<BR>
+Overall, in this Final project, I learned the concept of Correlation, Simple Linear Regression and Multiple Linear regression. I learned about the history of regression, importance of simple linear regression as well as multiple linear regression and their practical implementation in the industry of Finance. <P> 
+
+In task-1, I performed deep analysis of the faithful dataset. I learned about the correlation between the waiting time and eruption time of the Old Faithful Geyser. There is a strong positive correlation (r=0.9) between both the variables. It is also concluded that 81% of variation in Eruption time is explained by Waiting time with the help of coefficient of determination (R square = 0.81). With the help of hypothesis testing we concluded that, there is a significant relationship between the waiting time and eruption time. With the help of graph, I confirmed that there was Strong and Positive relationship between both variables since the regression line is sloping upwards and the angel of the regression line is almost 45° indication strong linear relationship. Finally, I was able to find out expected value of 𝑦̂ with the help of regression line equation : 𝑦̂ = −1.874+0.0756𝑥.
+
+In task-2, I performed deep analysis of the age, weight and systolicBP dataset using multiple regression model. I observed that the dependent variable – SystolicBP has strong correlation with both age and weight variables(multiple R = 0.99 and multiple R square = 0.98). With the help of hypothesis testing of multiple variables, I confirmed that there is a significant relationship between a person’s age , weight and SystolicBP. Finally, I was able to find out expected value of 𝑦̂ with the help of multiple regression line equation : ŷ = 30.99 + 0.86 * 𝑥 1 + 0.33* 𝑥 2. 
+
+<B>Skills Learned</B>: In this final project, I have learned many skills in R – programming as well as probability theory. 
+
+In <I>probability theory</I>, I learned the concepts of hypothesis testing, correlation, simple linear regression and multiple linear regression and when to use each concept along with practical application in real life scenario. 
+
+In <I>R Programming </I>, I learned how to find out the values of critical values, coefficient of correlation, coefficient of determination, develop linear equation using qt(), cor(), cor()^2, lm() functions. I learned how to make scatterplots for two variable for understanding correlation using plot(). I also learned how to insert regression line using abline() function. par(mfrow=c()) functioned helped me to represent two graphs together. Finally I also learned how to use datatable() and kable() function for better presentation of results.
+
+<B>Recommendation</B>: After analysing both dataset in task-1 and task-2 , I learned about how an independent variable affects dependent variable. In task-1, we  learned about simple linear and hence I would recommend to use Simple linear regression when we have one independent variable and one dependent variable. In task-2, we performed multiple linear regression model on Systolic blood pressure and hence I would recommend to use multiple linear regression model when we have two independent variable and one dependent variable. In this dataset, both age and weight have impact on systolic blood pressure. I would recommend here that, since we cannot control age, a person should control weight in order to control systolic blood pressure. 
+
+<FONT SIZE = 5, COLOR="#3434B3">
+BIBLIOGRAPHY
+</FONT>  
+<P><BR>
+Bevans, R. (2020, February 19). An introduction to simple linear regression.? Retrieved April 10, 2021, from https://www.scribbr.com/statistics/simple-linear-regression/
+<P>
+Bluman, A. G. (2018). Elementary statistics: A step by step approach. New York, NY: McGraw-Hill Education.
+<P>
+Choudhury, A. (2019, April 16). Why Regression Analysis Is The Backbone For Enterprises. Retrieved April 10, 2021, from https://analyticsindiamag.com/why-regression-analysis-is-the-backbone-for-enterprises/
+<P>
+Hayes, A. (2021, March 30). Multiple Linear Regression (MLR). Retrieved April 10, 2021, from https://www.investopedia.com/terms/m/mlr.asp
+<P>
+Kopf,D. (2015, November 06). The Discovery of Statistical Regression. Retrieved April 10, 2021, from https://priceonomics.com/the-discovery-of-statistical-regression/ 
+<P>
+Stanton, J. (2017, December 01). Galton, Pearson, and the Peas: A Brief History of Linear Regression for Statistics Instructors. Retrieved April 10, 2021, from https://www.tandfonline.com/doi/full/10.1080/10691898.2001.11910537
+<P>
+(2019, May 16). Earliest Known Uses of Some of the Words of Mathematics (R). Retrieved April 10, 2021, from https://jeff560.tripod.com/r.html
+<P>
+2.1 - What is Simple Linear Regression? Retrieved April 10, 2021, from https://online.stat.psu.edu/stat462/node/91/<P>
+
+<FONT SIZE = 5, COLOR="#3434B3">
+APPENDIX<P>
+</FONT> 
+An R Markdown file has been attached to this report. The name of the file is Final_Project_Report_Kalavadia.Rmd . 
+
+<FONT SIZE = 5, COLOR="#3434B3">
+ACKNOWLEDGEMENT<P>
+</FONT> 
+Firstly, I would like to thank my professor, Dr. Dee Chiluiza for providing guidelines about this project and for teaching all the concepts of Probability theory.<P> 
+Secondly, I would like to thank our TA, Ms. Shweta Gupta for constantly helping me with clearing doubts and organizing TA session which helped me in better understanding of all the concepts of Hypothesis testing, Correlation and Regression. <P>
+Lastly, I would like to thank my classmates for helping me out with my doubts during the TA session and through online meetings. They made sure I have a proper understanding of all the topics. <P>
+

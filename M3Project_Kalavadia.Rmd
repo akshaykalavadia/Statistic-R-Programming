@@ -1,0 +1,432 @@
+---
+output: html_document
+---
+<P>
+<BR>
+<CENTER>
+<FONT SIZE=4, COLOR = "#A11515">
+<B>PROJECT 3 REPORT </B>
+<BR>
+<B> ALY6010 22939 </B>
+<BR>
+Akshay Kirit Kalavadia
+<BR>
+Prof. Dee Chiluiza, PhD
+<BR>
+03/23/2021
+</FONT></CENTER>
+<P>
+<BR>
+
+<FONT SIZE = 5, COLOR="#3434B3">
+INTRODUCTION
+</FONT>  
+<BR>
+In statistics, it is not always possible to collect the data of entire population dues to limited resources and time constraint. Hence we take samples from the population which would represent entire population. The results of the sample are assigned to the entire populations. But sometimes due to error of sampling, the results of the parameters are not exactly the same as the population parameter. Hence we find out a range of values above and below sample parameters with a certain degree of confidence within which the parameter value of the population will be located. This interval is known as Confidence interval. (Bluman, 2018). Confidence intervals help us know the accuracy or precision of the estimate.
+
+Confidence interval is important because it helps us to save lot of time and effort in collecting the data of entire population. Confidence intervals help us know the accuracy or precision of the estimate. We can see practical implementation of confidence interval in manufacturing industry. For example, when a car manufacturing company launches new model and wants to find out the mileage of the car, they take data from the sample. Let’s say a the company will check the mileage of 50 cars. Minimum mileage from the sample is 38 miles per gallon and maximum mileage a car gave was 50 miles per gallon while the average mileage of the sample is 43 miles per gallon. Hence the company can express mileage of that the new car model as : Mileage = 38 <  Χ̅ < 50, that is, the sample mean lies between 38 and 50. Wider the confidence interval, more chances of true mean of the population included in this range which is decided by the confidence interval.
+
+A statistical hypothesis is a conjecture about a population parameter. This conjecture may or may not be true (Bluman, 2018). There is no proof of the conjecture. Hypothesis testing is used to know the plausibility of the hypothesis, that is, if the statement about the population parameter is correct or not. Hypothesis testing is done by examining a sample from the population which is being analysed. In hypothesis testing, the already established hypothesis is call Null Hypothesis (Ho) and the Alternative hypothesis(H1) states that there is difference between the Ho and the original parameter.
+
+Hypothesis testing theory was developed by Jerzy Neyman and Egon Pearson in 1920s. Hypothesis testing help us know if the Null hypothesis is correct or not with the help of statistical evidence. If we reject a null hypothesis, we have statistical proof from the sample that alternative hypothesis is correct rejecting the null hypothesis. 
+
+Hypothesis testing is used in many industries. Insurance is one such industry in which hypothesis testing is very important. Insurance companies use hypothesis testing for decision making. For example, an insurance companies reviews its policy rates. Initially the company believed that the mean amount of claim was $2000. Now they are worried that the true average is higher than this and can have huge losses. Now they will select random sample of certain claims and calculate the mean and will perform hypothesis testing to confirm Null hypothesis of $2000 is the mean claim amount or reject Ho, establishing new hypothesis and fixing new rates for alternative mean of claim amount.
+
+In this project, we will look deeper into more examples and calculations on confidence interval and hypothesis testing with different samples and number of observations.
+
+<FONT SIZE = 5, COLOR="#3434B3">
+ANALYSIS
+</FONT> 
+
+
+
+<FONT SIZE = 4, COLOR="#A11515"><B>
+Task 1
+</FONT></B>  
+<BR>
+In this task, I have calculated n, mean,sd and median for population and Sample-1.I have also calculated upper and lower limit along with CI width for various confidence intervals.
+```{r T1a, include=FALSE}
+library(readxl)
+t1a <- read_excel("DataSets/M3 Project Data (22939).xlsx")
+Population <- t1a[!is.na(t1a$Population),1]
+population_n<- nrow(Population)
+population_mean<- mean(Population$Population)
+population_sd<- sd(Population$Population)
+population_median<- median(Population$Population)
+population_data <- round(c(population_n,population_mean,population_sd,population_median),3)
+
+Sample1 <- t1a[!is.na(t1a$`Sample 1`),2]
+sample1_n <- nrow(Sample1)
+sample1_mean <- mean(Sample1$`Sample 1`)
+sample1_sd <- sd(Sample1$`Sample 1`)
+sample1_median <- median(Sample1$`Sample 1`)
+sample1_data <- round(c(sample1_n,sample1_mean,sample1_sd,sample1_median),3)
+T1a <- data.frame(population_data,sample1_data)
+colnames(T1a)<- c("Population", "Sample 1")
+rownames(T1a)<- c("n", "Mean","SD", "Median")
+library(DT)
+library(rio)
+library(dbplyr)
+```
+<BR>1. Below table shows n, mean, sd and median for Population and Sample 1.
+```{r T1b}
+datatable(T1a,options = list(paging = F))
+```
+
+```{r T1c, include=FALSE}
+T1errr = sample1_sd/sqrt(sample1_n)
+```
+<BR>2. In R chunk below, I have calculated 90% confidence intervals for the sample mean. For this, I have calculated Z for the confidence level, the margin of error (E), the upper and lower confidence interval limits, and the confidence interval width.
+
+```{r T1 confidence90}
+Z90_S1<- round(qnorm((1+0.90)/2),2)
+E90_S1<- Z90_S1 * (sample1_sd/sqrt(sample1_n))
+Lower_Limit_90_S1<- round(sample1_mean - E90_S1,2)
+Upper_Limit_90_S1<- round(sample1_mean + E90_S1,2)
+CI_Width_90_S1<- Upper_Limit_90_S1 - Lower_Limit_90_S1
+print(paste("With 90% confidence level, we can conclude that population mean measures between",Lower_Limit_90_S1,"and",Upper_Limit_90_S1,"having CI width of",CI_Width_90_S1))
+```
+<BR>3.	In R chunk below, I have calculate 94% confidence intervals for the sample mean. 
+
+```{r T1 confidence94}
+Z94_S1<- round(qnorm((1+0.94)/2),2)
+E94_S1<- Z94_S1 * (sample1_sd/sqrt(sample1_n))
+Lower_Limit_94_S1<- round(sample1_mean - E94_S1,2)
+Upper_Limit_94_S1<- round(sample1_mean + E94_S1,2)
+CI_Width_94_S1<- Upper_Limit_94_S1 - Lower_Limit_94_S1
+print(paste("With 94% confidence level, we can conclude that population mean measures between",Lower_Limit_94_S1,"and",Upper_Limit_94_S1,"having CI width of",CI_Width_94_S1))
+```
+
+<BR>4.	In R chunk below, I haved calculated 98% confidence intervals for the sample mean.
+
+```{r T1 confidence98}
+Z98_S1<- round(qnorm((1+0.98)/2),2)
+E98_S1<- Z98_S1 * (sample1_sd/sqrt(sample1_n))
+Lower_Limit_98_S1<- round(sample1_mean - E98_S1,2)
+Upper_Limit_98_S1<- round(sample1_mean + E98_S1,2)
+CI_Width_98_S1<- Upper_Limit_98_S1 - Lower_Limit_98_S1
+print(paste("With 98% confidence level, we can conclude that population mean measures between",Lower_Limit_98_S1,"and",Upper_Limit_98_S1,"having CI width of",CI_Width_98_S1))
+```
+
+<BR>5.	Question: Is the population mean value within the three confidence intervals of the sample you calculated?
+<P>Answer: No. As we compare population mean with the upper and lower limits from the table, we can observe that population mean is 1.05(approx) and it does not fall within three confidence intervals of sample.
+```{r,echo=FALSE}
+print(paste("Population Mean =",round(population_mean,2)))
+CI_90_S1<-c(Lower_Limit_90_S1,Upper_Limit_90_S1,CI_Width_90_S1)
+CI_94_S1<-c(Lower_Limit_94_S1,Upper_Limit_94_S1,CI_Width_94_S1)
+CI_98_S1<-c(Lower_Limit_98_S1,Upper_Limit_98_S1,CI_Width_98_S1)
+S1_CI<- data.frame(CI_90_S1,CI_94_S1,CI_98_S1)
+colnames(S1_CI)<- c("90%", "94%","98%")
+rownames(S1_CI)<- c("Lower Limit","Upper Limit","CI Width")
+datatable(S1_CI, options = list(paging = F))
+```
+<BR>6. Using margin of error formula, I have calculated minimum sample number for a margin of error = 0.5. Below table shows minimum sample number for three confidence intervals.
+```{r}
+n_90_S1<-round((qnorm(1.90/2)*population_sd/0.05)*(qnorm(1.90/2)*population_sd/0.05),)+1
+n_94_S1<-round((qnorm(1.94/2)*population_sd/0.05)*(qnorm(1.94/2)*population_sd/0.05),)+1
+n_98_S1<-round((qnorm(1.98/2)*population_sd/0.05)*(qnorm(1.98/2)*population_sd/0.05),)+1
+n_E_0.5_S1<- data.frame(n_90_S1,n_94_S1,n_98_S1)
+rownames(n_E_0.5_S1)<- "Sample size (n)"
+colnames(n_E_0.5_S1)<- c("90%", "94%","98%")
+datatable(n_E_0.5_S1, options = list(paging = F))
+```
+<BR>
+7. <B>Findings</B> : 
+In Task-1, We have compared mean,median and sd between population and Sample-1. We can observe that all the parameters of population are different from the parameters observed in Sample-1. 
+When we calculated three confidence intervals for Sample-1, It it observed that population mean does not fall within those intervals. Highest upper level was in 98% CI which was 1.04(approx) which is very close to population mean 1.05(approx). We can also conclude that <B>947</B> observations are minimum required for <B>90%</B> confidence intervals, <B>1238</B> observations for <B>94%</B> and <B>1894</B> observations for <B>98%</B> confidence intervals.
+<BR>
+
+<BR>
+<FONT SIZE = 4, COLOR="#A11515"><B>
+Task 2
+</FONT></B>  
+<BR>
+In this task, I have calculated 90%, 94% and 98% confidence intervals for the sample mean. In Sample-2, we have n=23. Therefore we will use t-score to calculate margin of error.
+<BR>
+<BR>
+1. Below table shows Lower Limit, Upper Limit and CI width for 90%, 94% and 98% Confidence intervals.
+```{r T2a, include=FALSE}
+Sample2<- t1a[!is.na(t1a$`Sample 2`),3]
+sample2_n <- nrow(Sample2)
+sample2_mean <- mean(Sample2$`Sample 2`)
+sample2_sd <- sd(Sample2$`Sample 2`)
+sample2_median <- median(Sample2$`Sample 2`)
+
+T_90_S2 <- round(qt(((1+0.90)/2),22),2)
+E_90_S2<- T_90_S2 *(sample2_sd/sqrt(sample2_n))
+Lower_Limit_90_S2 <- round(sample2_mean - E_90_S2,2)
+Upper_Limit_90_S2<- round(sample2_mean + E_90_S2,2)
+CI_Width_90_S2<- Upper_Limit_90_S2 - Lower_Limit_90_S2
+CI_90_S2<- c(Lower_Limit_90_S2,Upper_Limit_90_S2,CI_Width_90_S2)
+population_mean
+T_94_S2 <- round(qt(((1+0.94)/2),22),2)
+E_94_S2<- T_94_S2 *(sample2_sd/sqrt(sample2_n))
+Lower_Limit_94_S2 <- round(sample2_mean - E_94_S2,2)
+Upper_Limit_94_S2<- round(sample2_mean + E_94_S2,2)
+CI_Width_94_S2<- Upper_Limit_94_S2 - Lower_Limit_94_S2
+CI_94_S2<- c(Lower_Limit_94_S2,Upper_Limit_94_S2,CI_Width_94_S2)
+
+
+T_98_S2 <- round(qt(((1+0.98)/2),22),2)
+E_98_S2<- T_98_S2 *(sample2_sd/sqrt(sample2_n))
+Lower_Limit_98_S2 <- round(sample2_mean - E_98_S2,2)
+Upper_Limit_98_S2<- round(sample2_mean + E_98_S2,2)
+CI_Width_98_S2<- Upper_Limit_98_S2 - Lower_Limit_98_S2
+CI_98_S2<- c(Lower_Limit_98_S2,Upper_Limit_98_S2,CI_Width_98_S2)
+
+S2_CI<- data.frame(CI_90_S2,CI_94_S2,CI_98_S2)
+colnames(S2_CI)<- c("90%", "94%","98%")
+rownames(S2_CI)<- c("Lower Limit","Upper Limit","CI Width")
+```
+
+```{r T2b}
+datatable(S2_CI,options = list(paging = F))
+```
+<BR>
+2. Question: Is the population mean value within the three confidence intervals of the sample you calculated? 
+<BR> Answer: The <B>population mean</B> is <B>1.04644</B>. We can observe from the above table that population mean falls within the three confidence intervals of the sample.
+<BR>
+<BR>
+3. <B>Findings</B> : In this task, we have calculated Upper Limits, Lower limits and CI Width for three confidence intervals. We can see that as confidence levels increases, CI width increases. In Sample-2, <B>CI Width</B> for <B>90%</B> in <B>0.76</B> which increases to<B> 0.87</B> for <B>94%</B> and is <B>highest</B> at <B>98%</B> with <B>1.1</B>. We can also observe that population mean <B>1.04644</B> fall within all the confidence intervals.
+<BR>
+<BR>
+<FONT SIZE = 4, COLOR="#A11515"><B>
+Task 3
+</FONT></B>  
+<BR>
+In this task, I have calculated the proportion of success for both the population and Sample 3 (n = 1,500) that are lower than 1.5. I have also calculated the proportions of failure for each case.  
+<BR>
+1. Below table shows the upper and lower limits 90%, 94% and 98% confidence intervals for the sample proportion that are lower than 1.5 .
+```{r T3a, include= FALSE}
+n_population<- nrow(t1a)
+yes_population<- nrow(t1a[which(t1a$Population<1.5),])
+no_population<- n_population - yes_population
+psuccess_population<- yes_population/n_population
+pfail_population<- no_population/n_population
+
+
+Sample3<- t1a[!is.na(t1a$`Sample 3`),4]
+n_Sample3<- nrow(Sample3)
+yes_sample3=nrow(Sample3[which(Sample3$`Sample 3`<1.5),])
+no_sample3= n_Sample3 - yes_sample3
+psuccess_sample3<- yes_sample3/n_Sample3
+pfail_sample3<- no_sample3/n_Sample3
+```
+
+```{r T3b, include=FALSE}
+Z90_S3 = qnorm((1+0.90)/2)
+E_90_S3 = Z90_S3 * sqrt((psuccess_sample3*pfail_sample3/n_population))
+Lower_Limit_90_S3<- round(psuccess_sample3 - E_90_S3,3)
+Upper_Limit_90_S3<- round(psuccess_sample3 + E_90_S3,3)
+CI_Width_90_S3<- Upper_Limit_90_S3 - Lower_Limit_90_S3
+CI_90_S3<- c(Lower_Limit_90_S3,Upper_Limit_90_S3,CI_Width_90_S3)
+
+Z94_S3 = qnorm((1+0.94)/2)
+E_94_S3 = Z94_S3 * sqrt((psuccess_sample3*pfail_sample3/n_population))
+Lower_Limit_94_S3<- round(psuccess_sample3 - E_94_S3,3) 
+Upper_Limit_94_S3<- round(psuccess_sample3 + E_94_S3,3)
+CI_Width_94_S3<- Upper_Limit_94_S3 - Lower_Limit_94_S3
+CI_94_S3<- c(Lower_Limit_94_S3,Upper_Limit_94_S3,CI_Width_94_S3)
+
+Z98_S3 = qnorm((1+0.98)/2)
+E_98_S3 = Z98_S3 * sqrt((psuccess_sample3*pfail_sample3/n_population))
+Lower_Limit_98_S3<- round(psuccess_sample3 - E_98_S3,3)
+Upper_Limit_98_S3<- round(psuccess_sample3 + E_98_S3,3)
+CI_Width_98_S3<- c(Upper_Limit_98_S3 - Lower_Limit_98_S3)
+CI_98_S3<- c(Lower_Limit_98_S3,Upper_Limit_98_S3,CI_Width_98_S3)
+
+S3_CI<- data.frame(CI_90_S3,CI_94_S3,CI_98_S3)
+colnames(S3_CI)<- c("90%", "94%","98%")
+rownames(S3_CI)<- c("Lower Limit","Upper Limit","CI Width")
+```
+
+```{r T3c}
+datatable(S3_CI,options = list(paging = F))
+```
+<BR>
+2.	In R chunk below I have calculated the minimum sample size needed to estimate the population proportion of interest to within 6%. I have done this for each confidence interval above.
+```{r T3d1, include=FALSE}
+n_90_S3<-round((qnorm(1.90/2)*population_sd/0.06)*(qnorm(1.90/2)*population_sd/0.06),)+1
+n_94_S3<-round((qnorm(1.94/2)*population_sd/0.06)*(qnorm(1.94/2)*population_sd/0.06),)+1
+n_98_S3<-round((qnorm(1.98/2)*population_sd/0.06)*(qnorm(1.98/2)*population_sd/0.06),)+1
+n_E_0.6_S3<- data.frame(n_90_S3,n_94_S3,n_98_S3)
+rownames(n_E_0.6_S3)<- "Minimum Sample size (n)"
+colnames(n_E_0.6_S3)<- c("90%", "94%","98%")
+
+```
+```{r T3d2}
+datatable(n_E_0.6_S3, options = list(paging = F))
+```
+<BR>
+<BR>
+3. <B>Findings</B> : In this task, we have found out proportion of success that are lower than 1.5 for population and Sample-3. <B>Proportion of success for population</B>  is <B>0.8509762</B> . From the above table we can see that proportion of success for population fall within 90%, 94% and 98% confidence intervals. Also it has been observed that CI width increases with increase in confidence interval. We can also conclude that <B>658</B> observations for <B>90%</B> confidence intervals, <B>860</B> observations for <B>94%</B> and <B>1316</B> observations for <B>98%</B> confidence intervals are minimum sample size needed to estimate the population proportion of interest to within <B>6%</B>.
+ 
+<BR>
+
+
+<FONT SIZE = 4, COLOR="#A11515"><B>
+Task 4
+</FONT></B>  
+<BR>
+In this task, I have calculated 90%, 94% and 98% confidence intervals for sample standard deviation using Sample-4.
+To calculate these confidence intervals, I have used <B>Chi-Square distribution</B>.<BR>
+<BR>
+1. Below table shows 90%, 94% and 98% confidence intervals for sample standard deviation of Sample-4.
+```{r T4a, include=FALSE}
+Sample4<- t1a[!is.na(t1a$`Sample 4`),5]
+sample4_n <- nrow(Sample4)
+sample4_mean <- mean(Sample4$`Sample 4`)
+sample4_sd <- sd(Sample4$`Sample 4`)
+sample4_median <- median(Sample4$`Sample 4`)
+population_mean
+x2left_90_S4<-qchisq(0.05,149)
+x2right_90_S4<-qchisq(0.95,149)
+
+Lower_limit_90_S4 <- round(sqrt((sample4_n-1)*sample4_sd*sample4_sd/x2right_90_S4),3)
+Upper_Limit_90_S4 <- round(sqrt((sample4_n-1)*sample4_sd*sample4_sd/x2left_90_S4),3)
+CI_Width_90_S4 <- Upper_Limit_90_S4 - Lower_limit_90_S4
+CI_90_S4<- c(Lower_limit_90_S4,Upper_Limit_90_S4,CI_Width_90_S4)
+
+x2left_94_S4<-qchisq(0.03,149)
+x2right_94_S4<-qchisq(0.97,149)
+Lower_limit_94_S4 <- round(sqrt((sample4_n-1)*sample4_sd*sample4_sd/x2right_94_S4),3)
+Upper_Limit_94_S4 <- round(sqrt((sample4_n-1)*sample4_sd*sample4_sd/x2left_94_S4),3)
+CI_Width_94_S4 <- Upper_Limit_94_S4 - Lower_limit_94_S4
+CI_94_S4<- c(Lower_limit_94_S4,Upper_Limit_94_S4,CI_Width_94_S4)
+
+x2left_98_S4<-qchisq(0.01,149)
+x2right_98_S4<-qchisq(0.99,149)
+Lower_limit_98_S4 <- round(sqrt((sample4_n-1)*sample4_sd*sample4_sd/x2right_98_S4),3)
+Upper_Limit_98_S4 <- round(sqrt((sample4_n-1)*sample4_sd*sample4_sd/x2left_98_S4),3)
+CI_Width_98_S4 <- round(Upper_Limit_98_S4 - Lower_limit_98_S4,3)
+CI_98_S4<- c(Lower_limit_98_S4,Upper_Limit_98_S4,CI_Width_98_S4)
+
+S4_CI<- data.frame(CI_90_S4,CI_94_S4,CI_98_S4)
+colnames(S4_CI)<- c("90%", "94%","98%")
+rownames(S4_CI)<- c("Lower Limit","Upper Limit","CI Width")
+```
+
+
+```{r T4b}
+datatable(S4_CI, options = list(paging = F))
+population_sd
+```
+<BR>
+2. <B>Findings</B> : In this task, we find out all lower and upper limits of standard deviations of all intervals. We can see that population SD is <B>0.9351294</B> and when we compare the findings with the limits from Sample-4, none of the confidence intervals contain the population standard deviation.  Highest upper limit is at <B>98%</B> confidence interval, which is, <B>0.821</B>. 
+
+
+
+<FONT SIZE = 4, COLOR="#A11515"><B>
+Task 5
+</FONT></B>  
+
+
+In this tast, we are using sample 5 (n = 200) and test the alternative hypothesis that the population mean is different from 1.05.    
+  
+- Ho: µ=1.05  
+- H1: µ ≠ 1.05  
+
+I have created objects for population mean, population sd, sample size, sample mean, the critical value upper limit of α = 0.05, the critical value lower limit of α = 0.05  
+
+```{r T5a, echo=FALSE}
+Sample5<- t1a[!is.na(t1a$`Sample 5`),6]
+sample5_n <- nrow(Sample5)
+sample5_mean <- mean(Sample5$`Sample 5`)
+sample5_sd <- sd(Sample5$`Sample 5`)
+
+cv_Lower_limit <- qnorm(0.05)
+cv_Upper_limit <- qnorm(1-0.05)
+```
+<BR>
+1.	Using those values, I have calculated z test statistics value.
+
+```{r T5b}
+Z_test<- (sample5_mean - population_mean)/(population_sd/sqrt(sample5_n))
+Z_test
+```
+<B>The Z-test value is 0.447799, which is, between lower critical value -1.959964 and upper critical value 1.959964.</B>
+<BR>
+2. Confirming the hypothesis using P-Value.
+```{r T5c}
+2*(1-pnorm(0.447799))
+```
+<BR>3. <B>Findings</B> : In this task, we have performed hypothesis testing. The <B>z-test value</B> is <B>0.447799</B> which is within the critical values <B>-1.959964</B> and <B>1.959964</B>. Hence the null hypothesis (Ho) is <B>not rejected</B>. We have also confirmed it using P-value. Since<B> P-value 0.6542983</B> is <B>greater</B> than <B>alpha 0.1</B>, ho is <B>not rejected</B>.
+
+
+
+<FONT SIZE = 4, COLOR="#A11515"><B>
+Task 6
+</FONT></B>  
+
+In this task, we are using sample 6 (n = 29) to test the hypothesis that the population mean is lower than 1.05.  
+α = 0.01.  
+- Ho: µ=1.05  
+- H1: µ < 1.05
+```{r T6a, include=FALSE}
+Sample6<- t1a[!is.na(t1a$`Sample 6`),7]
+sample6_n <- nrow(Sample6)
+sample6_mean <- mean(Sample6$`Sample 6`)
+sample6_sd <- sd(Sample6$`Sample 6`)
+df_S6<- sample6_n - 1
+```
+
+<BR>1. In R chunk below I have calculated the critical value lower limit, t test statistics value, and the p value.
+
+```{r T6b}
+cv_S6<- qt(0.01,df_S6)
+cv_S6
+T_value <- (sample6_mean- population_mean)/ (sample6_sd/sqrt(29))
+T_value
+p_value_S6 <- (pt(T_value,28))
+p_value_S6
+```
+<BR>
+3. <B>Findings</B> : In this task, we can observe that this is one-tail hypothesis. On the left, <B>t-value -3.468227</B> is <B>lower</B> than <B>critical value -2.46714</B>. Also the <B>p-value 0.0008560416</B> is <B>less</B> than <B>alpha 0.01</B>. Hence <B>Ho should rejected</B>.
+
+
+
+
+<FONT SIZE = 5, COLOR="#3434B3">
+CONCLUSIONS
+</FONT> 
+
+In this Project, I have learned the concept of confidence interval and hypothesis testing in its importance. Hypothesis testing is one of the most important concept in analytics.
+In this project, we have used data of the population along with 6 samples to study various parameters using confidence intervals and hypothesis testing.
+In Task-1, we observed that population mean 1.05 does not fall within three confidence interval. Lowest Lower limit is 0.86 for 90% CI, while highest upper limit is 1.04 for 98% CI. We also noticed that minimum samples required to margin of error 0.5 are 947, 1238 and 1894 respectively for 90%, 94% and 98%.
+
+<BR>
+In Task-2, we had observations less than 30. Hence we used t-score to find out error of margin. We observed that population mean 1.04644 fall with all three confidence intervals. We can see that CI width in sample-1 is less than sample-2 for all three intervals.
+<BR>
+In Task-3, we observed that proportion of success for population is 0.851 and falls within 90%, 94% and 98% confidence intervals. We also observed that since number of observations are more (n=1500) the value of CI width is lower than other samples. CI for 90% is 0.014, 94% is 0.016 and 98% is 0.02. Minimum samples size to estimate the population proportion of interest to within 6% are also calculated in this task.
+<BR>
+In task-4, we used sample-4 to create 90%, 94% and 98% confidence intervals for the sample standard deviation. For standard deviation, I have used Chi-Square distribution. SD for the population is 0.935 which is not within three confidence intervals for sd.
+<BR>
+In Task-5, we used hypothesis testing method for sample-5. It is two-tailed hypothesis. We observed that z-test value is between upper and lower critical values and p-value is greater than alpha. Hence we conclude that Null hypothesis (Ho): µ=1.05 is not rejected.
+<BR>
+In Task-6, we performed one-tailed hypothesis test on sample-6. We observe that t-value is less than critical value on the left and p-value is also less than alpha. Hence we conclude that Null hypothesis (Ho):µ=1.05 is rejected.
+
+In this Project, I learned how to perform one-tail and two-tail hypothesis testing using R.
+
+<FONT SIZE = 5, COLOR="#3434B3">
+BIBLIOGRAPHY
+</FONT> 
+
+<P>
+Bluman, A. G. (2018). Elementary statistics: A step by step approach. New York, NY: McGraw-Hill Education.
+<P>
+Biau, D., Jolles, B., & Porcher, R. (2010, March). P value and the theory of hypothesis testing: An explanation for new researchers. Retrieved March 23, 2021, from https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2816758/#CR15
+<P>
+Confidence interval. Retrieved March 22, 2021, from https://www.referenceforbusiness.com/encyclopedia/Clo-Con/Confidence-Interval.html
+<P>
+Minitab Blog Editor. (2015, March 05). Understanding hypothesis tests: Why we need to use hypothesis tests in statistics. Retrieved March 23, 2021, from https://blog.minitab.com/en/adventures-in-statistics-2/understanding-hypothesis-tests-why-we-need-to-use-hypothesis-tests-in-statistics#:~:text=Hypothesis%20testing%20is%20an%20essential,thanks%20to%20a%20hypothesis%20test
+<P>
+Seth, S. (2021, February 04). Hypothesis testing in finance: Concept and examples. Retrieved March 23, 2021, from https://www.investopedia.com/articles/active-trading/092214/hypothesis-testing-finance-concept-examples.asp
+<P>
+
+
+
+<FONT SIZE = 5, COLOR="#3434B3">
+APPENDIX
+</FONT> 
+
+An R Markdown file has been attached to this report. The name of the file is M3Project_kalavadia.Rmd . 
